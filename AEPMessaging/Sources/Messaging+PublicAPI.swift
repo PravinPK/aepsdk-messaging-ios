@@ -54,7 +54,28 @@ import UserNotifications
         MobileCore.dispatch(event: event)
     }
     
-    static func handleReceivedRemoteNotification(_ content: UNNotificationContent) {
+    static func handleReceiveRemoteNotification(_ content: UNNotificationContent) {
+        guard let deletionMessageId = content.userInfo["deleteMessageExecutionID"] as? String else {
+            return
+        }
         
+        let notificationCenter = UNUserNotificationCenter.current()
+        notificationCenter.getDeliveredNotifications { deliveredNotifications in
+            for eachNotification in deliveredNotifications {
+                if let xdm = eachNotification.request.content.userInfo["_xdm"] as? Dictionary<String, Any> {
+                    if let mixin = xdm["mixin"] as? Dictionary<String, Any> {
+                        if let experience = mixin["_experience"] as? Dictionary<String, Any> {
+                            if let customerJourneyManagement = experience["customerJourneyManagement"] as? Dictionary<String, Any> {
+                                if let messageExecutionID = customerJourneyManagement["messageExecution"] as? String {
+                                    if messageExecutionID == deletionMessageId {
+                                        notificationCenter.removeDeliveredNotifications(withIdentifiers: [eachNotification.request.identifier])
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
