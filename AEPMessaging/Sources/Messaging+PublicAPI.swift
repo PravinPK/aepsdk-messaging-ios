@@ -54,8 +54,8 @@ import UserNotifications
         MobileCore.dispatch(event: event)
     }
     
-    static func handleReceiveRemoteNotification(_ content: UNNotificationContent) {
-        guard let deletionMessageId = content.userInfo["deleteMessageExecutionID"] as? String else {
+    static func handleReceiveRemoteNotification(withUserInfo userInfo: [AnyHashable : Any]) {
+        guard let deletionMessageId = userInfo["deleteMessageExecutionID"] as? String else {
             return
         }
         
