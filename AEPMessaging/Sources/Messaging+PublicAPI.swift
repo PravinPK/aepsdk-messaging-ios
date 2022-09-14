@@ -53,4 +53,8 @@ import UserNotifications
                           data: eventData)
         MobileCore.dispatch(event: event)
     }
+    
+    static func handleReceivedRemoteNotification(_ content: UNNotificationContent) {
+        
+    }
 }
