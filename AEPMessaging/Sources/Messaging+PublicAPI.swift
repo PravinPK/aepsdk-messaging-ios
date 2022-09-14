@@ -55,7 +55,11 @@ import UserNotifications
     }
     
     static func handleReceiveRemoteNotification(withUserInfo userInfo: [AnyHashable : Any]) {
-        guard let deletionMessageId = userInfo["deleteMessageExecutionID"] as? String else {
+        guard let aps = userInfo["aps"] as? Dictionary<String, Any> else {
+            return
+        }
+        
+        guard let deletionMessageId = aps["deleteMessageExecutionID"] as? String else {
             return
         }
         
