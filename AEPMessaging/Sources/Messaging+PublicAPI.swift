@@ -15,6 +15,7 @@ import AEPServices
 import UserNotifications
 
 @objc public extension Messaging {
+    
 
     /// Sends the push notification interactions as an experience event to Adobe Experience Edge.
     /// - Parameters:
@@ -55,6 +56,17 @@ import UserNotifications
     }
     
     static func handleReceiveRemoteNotification(withUserInfo userInfo: [AnyHashable : Any]) {
+        self.internalHandleReceiveRemoteNotification(withUserInfo: userInfo)
+    }
+    
+    static func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) -> Bool {
+        return internaldidReceive(request, withContentHandler: contentHandler)
+    }
+}
+
+extension Messaging {
+    
+    static func internalHandleReceiveRemoteNotification(withUserInfo userInfo: [AnyHashable : Any]) {
         guard let aps = userInfo["aps"] as? Dictionary<String, Any> else {
             return
         }
@@ -82,4 +94,123 @@ import UserNotifications
             }
         }
     }
+    
+    static func internaldidReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) -> Bool {
+        self.contentHandler = contentHandler
+        bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
+        
+        guard let bestAttemptContent = bestAttemptContent else {
+            return false
+        }
+        guard let imageURLString =
+                bestAttemptContent.userInfo["adb_media"] as? String else {
+            contentHandler(bestAttemptContent)
+            return false
+        }
+        
+        getMediaAttachment(for: imageURLString) { image in
+            // 3
+            guard
+                let image = image,
+                let fileURL = saveImageAttachment(
+                    image: image,
+                    forIdentifier: "attachment.png")
+            else {
+                contentHandler(bestAttemptContent)
+                return
+            }
+
+            // 5
+            let imageAttachment = try? UNNotificationAttachment(
+                identifier: "image",
+                url: fileURL,
+                options: nil)
+
+            // 6
+            if let imageAttachment = imageAttachment {
+                bestAttemptContent.attachments = [imageAttachment]
+            }
+            contentHandler(bestAttemptContent)
+        }
+        return true
+    }
+    
+    private static func getMediaAttachment(for urlString: String, completion: @escaping (UIImage?) -> Void) {
+      // 1
+      guard let url = URL(string: urlString) else {
+        completion(nil)
+        return
+      }
+
+      // 2
+      downloadImage(forURL: url) { result in
+        // 3
+        guard let image = try? result.get() else {
+          completion(nil)
+          return
+        }
+
+        // 4
+        completion(image)
+      }
+    }
+    
+    private static func saveImageAttachment(image: UIImage, forIdentifier identifier: String) -> URL? {
+      // 1
+      let tempDirectory = URL(fileURLWithPath: NSTemporaryDirectory())
+      // 2
+      let directoryPath = tempDirectory.appendingPathComponent(
+        ProcessInfo.processInfo.globallyUniqueString,
+        isDirectory: true)
+
+      do {
+        // 3
+        try FileManager.default.createDirectory(
+          at: directoryPath,
+          withIntermediateDirectories: true,
+          attributes: nil)
+
+        // 4
+        let fileURL = directoryPath.appendingPathComponent(identifier)
+
+        // 5
+        guard let imageData = image.pngData() else {
+          return nil
+        }
+
+        // 6
+        try imageData.write(to: fileURL)
+          return fileURL
+        } catch {
+          return nil
+      }
+    }
+
+    private static func downloadImage(forURL url: URL, completion: @escaping (Result<UIImage, Error>) -> Void) {
+      let task = URLSession.shared.dataTask(with: url) { data, response, error in
+        if let error = error {
+          completion(.failure(error))
+          return
+        }
+        
+        guard let data = data else {
+          completion(.failure(DownloadError.emptyData))
+          return
+        }
+        
+        guard let image = UIImage(data: data) else {
+          completion(.failure(DownloadError.invalidImage))
+          return
+        }
+        
+        completion(.success(image))
+      }
+      
+      task.resume()
+    }
+}
+
+enum DownloadError: Error {
+  case emptyData
+  case invalidImage
 }

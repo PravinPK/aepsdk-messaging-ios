@@ -21,6 +21,9 @@ public class Messaging: NSObject, Extension {
     public var friendlyName = MessagingConstants.FRIENDLY_NAME
     public var metadata: [String: String]?
     public var runtime: ExtensionRuntime
+    static var contentHandler: ((UNNotificationContent) -> Void)?
+    static var bestAttemptContent: UNMutableNotificationContent?
+    
 
     // =================================================================================================================
     // MARK: - ACPExtension protocol methods
