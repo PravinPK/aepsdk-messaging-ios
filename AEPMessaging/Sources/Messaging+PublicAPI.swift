@@ -77,10 +77,19 @@ extension Messaging {
             return
         }
         
-        guard let deletionMessageId = aps["deleteMessageExecutionID"] as? String else {
-            return
+        
+        
+        if let deletionMessageId = aps["deleteMessageExecutionID"] as? String {
+            silentNotificationDeleteMessage(deletionMessageId)
         }
         
+        if let eventDetails = aps["sdkevent"] as? [String:Any] {
+            silentNotificationSendEvent(eventDetails)
+        }
+        
+    }
+    
+    static func silentNotificationDeleteMessage(_ deletionMessageId : String) {
         let notificationCenter = UNUserNotificationCenter.current()
         notificationCenter.getDeliveredNotifications { deliveredNotifications in
             for eachNotification in deliveredNotifications {
@@ -99,6 +108,27 @@ extension Messaging {
                 }
             }
         }
+    }
+    
+    static func silentNotificationSendEvent(_ eventDetails : [String:Any]) {
+        guard let name =  eventDetails["name"] as? String else {
+            return
+        }
+        guard let type =  eventDetails["type"] as? String else {
+            return
+        }
+        guard let source =  eventDetails["source"] as? String else {
+            return
+        }
+        guard let data =  eventDetails["data"] as? [String:Any] else {
+            return
+        }
+        
+        let event = Event(name: name,
+                          type: type,
+                          source: source,
+                          data: data)
+        MobileCore.dispatch(event: event)
     }
     
     static func internaldidReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) -> Bool {
