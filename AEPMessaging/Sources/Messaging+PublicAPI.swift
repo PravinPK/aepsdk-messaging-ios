@@ -62,6 +62,12 @@ import UserNotifications
     static func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) -> Bool {
         return internaldidReceive(request, withContentHandler: contentHandler)
     }
+    
+    static func serviceExtensionTimeWillExpire() {
+        if let contentHandler = contentHandler, let bestAttemptContent =  bestAttemptContent {
+            contentHandler(bestAttemptContent)
+        }
+    }
 }
 
 extension Messaging {
