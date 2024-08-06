@@ -18,8 +18,10 @@ import UIKit
 import UserNotifications
 import WebKit
 import UserNotifications
+import SwiftUI
 
 class ViewController: UIViewController {
+    @IBOutlet weak var containerView: UIView!
     @IBOutlet var switchShowMessages: UISwitch?
 
     private let messageHandler = MessageHandler()
@@ -128,7 +130,35 @@ class ViewController: UIViewController {
     }
 
     @IBAction func refreshMessages(_: Any) {
-        Messaging.refreshInAppMessages()
+//        SmallImageTemplate.customize  = { template in
+//            template.title.content = "changed"
+//        }
+        
+        MessagingUI.getCardsForSurfaces(Surface(path: ""), { cards in
+            
+            let swiftUIListView =  List {
+                ForEach(cards) { eachCard in
+                    eachCard.view
+                        .frame(width: 310,height: 140)
+               }
+           }
+            DispatchQueue.main.async {
+                
+                
+                let uiView = UIHostingController(rootView: swiftUIListView)
+                self.containerView.addSubview(uiView.view)
+                
+                
+                uiView.view.translatesAutoresizingMaskIntoConstraints = false
+                NSLayoutConstraint.activate([
+                    uiView.view.leadingAnchor.constraint(equalTo: self.containerView.leadingAnchor, constant: 16),
+                    uiView.view.trailingAnchor.constraint(equalTo: self.containerView.trailingAnchor, constant: -16),
+                    uiView.view.topAnchor.constraint(equalTo: self.containerView.topAnchor, constant: 0),
+                    uiView.view.heightAnchor.constraint(equalToConstant: 140)
+                ])
+            }
+
+        })
     }
 
     @IBAction func showStoredMessage(_: Any) {

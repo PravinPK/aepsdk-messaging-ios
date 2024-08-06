@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -24,9 +25,8 @@
                                     <action selector="scheduleNotification:" destination="BYZ-38-t0r" eventType="touchUpInside" id="amT-JB-xZL"/>
                                 </connections>
                             </button>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" title="switchShowMessages" translatesAutoresizingMaskIntoConstraints="NO" id="EBc-JU-ld1">
-                                <rect key="frame" x="44" y="721" width="49" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" title="switchShowMessages" translatesAutoresizingMaskIntoConstraints="NO" id="EBc-JU-ld1">
+                                <rect key="frame" x="44" y="721" width="51" height="31"/>
                                 <connections>
                                     <action selector="toggleShowMessages:" destination="BYZ-38-t0r" eventType="valueChanged" id="zye-X0-zh2"/>
                                 </connections>
@@ -147,11 +147,28 @@
                                     <action selector="checkSequence:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ap4-jB-rH1"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KpG-xI-0tq">
+                                <rect key="frame" x="0.0" y="768" width="414" height="128"/>
+                                <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="voL-Zz-zKL"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="KpG-xI-0tq" secondAttribute="bottom" id="Gqg-bs-jJa"/>
+                            <constraint firstItem="KpG-xI-0tq" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="H7i-Cn-f0w"/>
+                            <constraint firstItem="KpG-xI-0tq" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Ihs-IV-9Ef"/>
+                            <constraint firstItem="KpG-xI-0tq" firstAttribute="top" secondItem="EBc-JU-ld1" secondAttribute="bottom" constant="16" id="LYC-Gk-Oii"/>
+                            <constraint firstItem="KpG-xI-0tq" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="P6x-0w-XYS"/>
+                            <constraint firstItem="KpG-xI-0tq" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Ua3-W5-IDc"/>
+                            <constraint firstAttribute="bottom" secondItem="KpG-xI-0tq" secondAttribute="bottom" id="g65-QB-7sn"/>
+                        </constraints>
                     </view>
                     <connections>
+                        <outlet property="containerView" destination="KpG-xI-0tq" id="MvT-BV-I93"/>
                         <outlet property="switchShowMessages" destination="EBc-JU-ld1" id="Qox-bQ-3Ix"/>
                     </connections>
                 </viewController>
@@ -160,4 +177,9 @@
             <point key="canvasLocation" x="137.68115942028987" y="128.57142857142856"/>
         </scene>
     </scenes>
+    <resources>
+        <systemColor name="systemIndigoColor">
+            <color red="0.34509803919999998" green="0.33725490200000002" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
 </document>
