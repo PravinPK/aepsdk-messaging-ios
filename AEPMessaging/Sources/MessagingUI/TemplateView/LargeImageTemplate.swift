@@ -14,7 +14,7 @@ struct LargeImageTemplate {
     public var body : Text?
     
     
-    init(dataProvider: CardDataProvider) {
+    init(dataProvider: CardDataSource) {
         if let content = dataProvider.getContent(),
            let titleData = content["title"] as? [String: Any],
            let titleText = titleData["text"] as? String {
@@ -28,13 +28,13 @@ struct LargeImageTemplate {
 @available(iOS 13.0, *)
 struct LargeImageTemplateView : View {
     var model : LargeImageTemplate
-    var interactionHandler: CardInteractionHandler
+    var interactionHandler: CardDelegate
     
     var body: some View {
         HStack {
             Text("Large Image Template")
             Button(action: {
-                interactionHandler.cardInteracted("Click me")
+                interactionHandler.cardInteracted("Click me", actionURL: nil)
             }, label: {
                 Text("Click me")
             })

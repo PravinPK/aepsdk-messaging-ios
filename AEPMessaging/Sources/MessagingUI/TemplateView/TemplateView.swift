@@ -9,8 +9,8 @@ import SwiftUI
 
 @available(iOS 13.0, *)
 public struct TemplateView: View {    
-    var dataProvider: CardDataProvider
-    var interactionHandler: CardInteractionHandler
+    var dataProvider: CardDataSource
+    var interactionHandler: CardDelegate
     
     public var body: some View {
         switch dataProvider.getTemplateType() {

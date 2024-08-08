@@ -134,7 +134,7 @@ class ViewController: UIViewController {
 //            template.title.content = "changed"
 //        }
         
-        MessagingUI.getCardsForSurfaces(Surface(path: ""), { cards in
+        AEPSwiftUI.getCardsForSurfaces(Surface(path: ""), { cards in
             
             let swiftUIListView =  List {
                 ForEach(cards) { eachCard in

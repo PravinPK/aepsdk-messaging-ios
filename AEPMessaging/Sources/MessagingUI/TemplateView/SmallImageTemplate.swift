@@ -9,27 +9,30 @@ import SwiftUI
 
 @available(iOS 13.0, *)
 public struct SmallImageTemplate {
-    
+
+    // element
     public var title : AEPText
     public var body : AEPText?
     public var image: AEPImage?
     public var button : AEPButton?
     
+    // layout
     public var rootHStack: AEPHStack
     public var textVStack: AEPVStack
     public var buttonHStack: AEPHStack
+    
+    private var data : CardDataSource
+    
     var actionUrl: URL?
+    var interactionHandler: CardDelegate
     
-    var interactionHandler: CardInteractionHandler
-    
-    public static var customize: ((inout SmallImageTemplate) -> Void)?
     
     public lazy var view: some View = {
-        self.buildViews()
+        self.buildViews().onAppear(perform: interactionHandler.cardDisplayed)
     }()
     
-    init?(dataProvider: CardDataProvider, interactionHandler : CardInteractionHandler) {
-        
+    init?(dataProvider: CardDataSource, interactionHandler : CardDelegate) {
+        self.data = dataProvider
         guard let content = dataProvider.getContent(),
               let titleData = content["title"] as? [String: Any],
               let title = AEPText(titleData) else {
@@ -60,13 +63,9 @@ public struct SmallImageTemplate {
         self.buttonHStack = AEPHStack()
     }
     
-    public mutating func applyCustomization() {
-        if let customization = SmallImageTemplate.customize {
-            customization(&self)
-        }
-    }
     
     private func buildViews() -> some View {
+        data.getCustomizer()?.customize(forTemplate: self)
         textVStack.addView(.text(AEPTextView(model: title)))
         
         if let body = body {
@@ -83,48 +82,7 @@ public struct SmallImageTemplate {
         }
         
         rootHStack.addView(.vStack(textVStack.view))
-        
-        var mutableSelf = self
-        mutableSelf.applyCustomization()
+
         return rootHStack.view
     }
 }
-
-//@available(iOS 13.0, *)
-//struct SmallImageTemplateView : View {
-//    
-//    var model: SmallImageTemplate
-//    
-//    @State private var isVisible = true
-//    var body: some View {
-//        if isVisible {
-//            model.buildViews()
-//        } else {
-//            EmptyView()
-//        }
-//    }
-//}
-
-
-//private func buildViews() -> some View {
-//    textVStack.addView(title.view)
-//    
-//    if let body = body {
-//        textVStack.addView(body.view)
-//    }
-//            
-//    if let button = button {
-//        buttonHStack.addView(button.view)
-//        textVStack.addView(buttonHStack.view)
-//    }
-//    
-//    if let image = image {
-//        rootHStack.addView(image.view)
-//    }
-//
-//    rootHStack.addView(textVStack.view)
-//    
-//    var mutableSelf = self
-//    mutableSelf.applyCustomization()
-//    return rootHStack.view
-//}

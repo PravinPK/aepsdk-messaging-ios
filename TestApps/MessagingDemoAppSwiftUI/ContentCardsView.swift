@@ -92,55 +92,24 @@ struct ContentCardsView : View {
         List {
              ForEach(savedCards) { eachCard in
                  eachCard.view
-                     .frame(width: 310,height: 140)
+                     .frame(width: 310,height: 120)
             }
         }
         .listRowSpacing(20)
         .listRowSeparator(.hidden)
         .onAppear(perform: {
             
-            SmallImageTemplate.customize = { template in
-                // Title text configuration
-                template.title.font = .system(size: 15)
-                template.title.textColor = .blue
 
-
-                // Body text configuration
-                template.body?.font = .system(size: 13)
-                template.body?.textColor = .gray
-                
-                
-                // Action Button configuration
-                template.button?.text.font = .system(size: 14)
-                
-                //template.rootHStack.addView(Text("Hello"))
-                
-                // Button Stack Configuration
-                template.buttonHStack.view.frame(maxWidth : .infinity)
-                template.buttonHStack.view.frame(alignment : .trailing)
-                
-                // image configuration
-                //template.image?.layout.padding = EdgeInsets(top: 20, leading: 10, bottom: 20, trailing: 20)
-                
-                // RootView configuration
-                template.rootHStack.view.frame(height : 120)
-                template.rootHStack.view.cornerRadius(10)
-                template.rootHStack.view.border(.gray, width: 2)
-                
-                // TextStack configuration
-                template.textVStack.spacing = 8
-                template.textVStack.view.padding([.leading, .trailing], 10)
-            }
-
-            MessagingUI.getCardsForSurfaces(Surface(path: "card"), { cards in
+            AEPSwiftUI.getCardsForSurfaces(Surface(path: "card"),
+                                            cardListener: self,
+                                            cardCustomizer: self, { cards in
                 savedCards = cards
-                savedCards.forEach { $0.listener = self }
             })
         })
     }
 }
 
-// Conform to the delegate protocol
+// Implement the listener protocol
 extension ContentCardsView: ContentCardUIEventListener {
     
     func didDisplay(_ card: ContentCardUI) {
@@ -157,18 +126,46 @@ extension ContentCardsView: ContentCardUIEventListener {
     
 }
 
+
+// Implement the customizer protocol
+extension ContentCardsView: ContentCardUICustomizer {
+    
+    func customize(forTemplate template : SmallImageTemplate) {
+        
+        template.title.font = .system(size: 15)
+        template.title.textColor = .blue
+        template.title.modifier = {{
+            
+        }}
+
+        // Body text configuration
+        template.body?.font = .system(size: 13)
+        template.body?.textColor = .gray
+        
+        // Action Button configuration
+        template.button?.text.font = .system(size: 14)        
+    }
+}
+
 struct ContentCardsView_Previews: PreviewProvider {
     static var previews: some View {
         ContentCardsView()
     }
 }
 
-struct PravinModifier : ViewModifier {
+struct TitleModifier : ViewModifier {
     func body(content: Content) -> some View {
-         content
-            .padding()
-            .background(Color.blue)
+         content    
+            .shadow(radius: 2)
+            .background(Color.gray)
      }
 }
 
 
+struct RootViewModifier : ViewModifier {
+    func body(content: Content) -> some View {
+         content
+            .shadow(radius: 2)
+            .background(Color.gray)
+     }
+}

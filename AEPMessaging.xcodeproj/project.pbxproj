@@ -216,7 +216,7 @@
 		B6165DAA29A67ADA0031B84D /* NotificationService.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B6165DA329A67AD90031B84D /* NotificationService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B631AE162A61336800E8B82E /* MessagingNotificationTrackingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B631AE152A61336800E8B82E /* MessagingNotificationTrackingTests.swift */; };
 		B6389A492A9B32D400B72FB4 /* PushTrackingStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6389A482A9B32D400B72FB4 /* PushTrackingStatus.swift */; };
-		B6AA2C892C59C04A00A6780C /* MessagingUI+PublicAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AA2C882C59C04A00A6780C /* MessagingUI+PublicAPI.swift */; };
+		B6AA2C892C59C04A00A6780C /* AEPSwiftUI+PublicAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AA2C882C59C04A00A6780C /* AEPSwiftUI+PublicAPI.swift */; };
 		B6AA2C8B2C59C16E00A6780C /* ContentCardUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AA2C8A2C59C16E00A6780C /* ContentCardUI.swift */; };
 		B6AA2C8E2C59F70600A6780C /* TemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AA2C8D2C59F70600A6780C /* TemplateView.swift */; };
 		B6AA2C902C59FBE800A6780C /* SmallImageTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AA2C8F2C59FBE800A6780C /* SmallImageTemplate.swift */; };
@@ -596,7 +596,7 @@
 		B6165DA729A67ADA0031B84D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B631AE152A61336800E8B82E /* MessagingNotificationTrackingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingNotificationTrackingTests.swift; sourceTree = "<group>"; };
 		B6389A482A9B32D400B72FB4 /* PushTrackingStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushTrackingStatus.swift; sourceTree = "<group>"; };
-		B6AA2C882C59C04A00A6780C /* MessagingUI+PublicAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessagingUI+PublicAPI.swift"; sourceTree = "<group>"; };
+		B6AA2C882C59C04A00A6780C /* AEPSwiftUI+PublicAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AEPSwiftUI+PublicAPI.swift"; sourceTree = "<group>"; };
 		B6AA2C8A2C59C16E00A6780C /* ContentCardUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentCardUI.swift; sourceTree = "<group>"; };
 		B6AA2C8D2C59F70600A6780C /* TemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateView.swift; sourceTree = "<group>"; };
 		B6AA2C8F2C59FBE800A6780C /* SmallImageTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallImageTemplate.swift; sourceTree = "<group>"; };
@@ -1104,7 +1104,7 @@
 			isa = PBXGroup;
 			children = (
 				B6AA2C8C2C59DCBC00A6780C /* TemplateView */,
-				B6AA2C882C59C04A00A6780C /* MessagingUI+PublicAPI.swift */,
+				B6AA2C882C59C04A00A6780C /* AEPSwiftUI+PublicAPI.swift */,
 				B6AA2C8A2C59C16E00A6780C /* ContentCardUI.swift */,
 			);
 			path = MessagingUI;
@@ -1997,7 +1997,7 @@
 				2450599D2673FABF00CC7CA0 /* Messaging+PublicAPI.swift in Sources */,
 				09B071E82A64D80E00F259C1 /* Bundle+Messaging.swift in Sources */,
 				245059A72673FAC700CC7CA0 /* Event+Messaging.swift in Sources */,
-				B6AA2C892C59C04A00A6780C /* MessagingUI+PublicAPI.swift in Sources */,
+				B6AA2C892C59C04A00A6780C /* AEPSwiftUI+PublicAPI.swift in Sources */,
 				B6AA2C9C2C5C48D400A6780C /* AEPVStack.swift in Sources */,
 				244E9584268262C8001DC957 /* Message.swift in Sources */,
 				244E955B267BB253001DC957 /* Dictionary+Messaging.swift in Sources */,

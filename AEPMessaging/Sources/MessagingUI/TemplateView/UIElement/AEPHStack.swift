@@ -7,14 +7,12 @@ public class AEPHStack: ObservableObject {
     @Published var views: [AEPViewType] = []
     @Published public var spacing: CGFloat?
     @Published public var alignment: VerticalAlignment?
+    @Published public var modifier: AEPViewModifier?
     
     public lazy var view: AEPHStackView = {
         AEPHStackView(model: self)
     }()
     
-//    public func addView<V: AEPView>(_ view: V) {
-//        views.append(AnyView(view))
-//    }
     
     public func addView(_ view: AEPViewType) {
          views.append(view)
@@ -23,6 +21,10 @@ public class AEPHStack: ObservableObject {
     public func removeView(at index: Int) {
         guard views.indices.contains(index) else { return }
         views.remove(at: index)
+    }
+    
+    public func setModifier<M: ViewModifier>(_ modi: M) {
+        self.modifier = AEPViewModifier(modi)
     }
 }
 
@@ -37,7 +39,7 @@ public struct AEPHStackView: AEPView {
     public var body: some View {
         HStack(alignment: model.alignment ?? .center, spacing: model.spacing) {
             ForEach(Array(model.views.enumerated()), id: \.offset) { index, viewType in
-                viewType.view
+                viewType.view.applyModifier(model.modifier)
             }
         }
     }
