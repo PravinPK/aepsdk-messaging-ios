@@ -905,7 +905,7 @@
 		92315433261E3B36004AE7D3 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				B6AA2C872C59C03600A6780C /* MessagingUI */,
+				B6AA2C872C59C03600A6780C /* AEPSwiftUI */,
 				242920F62AD0628B000DB2CD /* schemas */,
 				92315435261E3B36004AE7D3 /* AEPMessaging.h */,
 				09B071F52A7318CB00F259C1 /* Array+Messaging.swift */,
@@ -1100,14 +1100,14 @@
 			path = TestApps/MessagingDemoApp/NotificationService;
 			sourceTree = "<group>";
 		};
-		B6AA2C872C59C03600A6780C /* MessagingUI */ = {
+		B6AA2C872C59C03600A6780C /* AEPSwiftUI */ = {
 			isa = PBXGroup;
 			children = (
 				B6AA2C8C2C59DCBC00A6780C /* TemplateView */,
 				B6AA2C882C59C04A00A6780C /* AEPSwiftUI+PublicAPI.swift */,
 				B6AA2C8A2C59C16E00A6780C /* ContentCardUI.swift */,
 			);
-			path = MessagingUI;
+			path = AEPSwiftUI;
 			sourceTree = "<group>";
 		};
 		B6AA2C8C2C59DCBC00A6780C /* TemplateView */ = {
