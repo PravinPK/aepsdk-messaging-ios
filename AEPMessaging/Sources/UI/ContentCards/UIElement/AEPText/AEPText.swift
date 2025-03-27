@@ -33,6 +33,16 @@ public class AEPText: ObservableObject, AEPViewModel {
 
     /// The SwiftUI view of the text
     lazy var view: some View = AEPTextView(model: self)
+    
+    /// Initializes a new instance of `AEPText` with the specified content
+    /// - Parameter content: The text content to display
+    public init(content: String) {
+        self.content = content
+        
+        // Initialize with default styles for body text
+        font = AEPTextType.body.defaultFont
+        textColor = AEPTextType.body.defaultColor
+    }
 
     /// Initializes a new instance of `AEPText`
     /// Failable initializer, returns nil if the required fields are not present in the data

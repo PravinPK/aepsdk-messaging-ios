@@ -16,42 +16,60 @@ import SwiftUI
 struct CardsView: View, ContentCardUIEventListening {
     
     let cardsSurface = Surface(path: Constants.SurfaceName.CONTENT_CARD)
-    @State var savedCards : [ContentCardUI] = []
+    @State var container : ContentCardContainerUI?
     @State private var viewLoaded: Bool = false
     @State private var showLoadingIndicator: Bool = false
+    @State private var isHorizontalScroll: Bool = false
+    @State private var showHeader: Bool = true
+    @State private var isSettingsVisible: Bool = false
+    @State private var settingsOffset: CGFloat = UIScreen.main.bounds.height
     
     var body: some View {
-        VStack {
-            TabHeader(title: "Content Cards", refreshAction: {
-                refreshCards()
-            }, redownloadAction: {
-                downloadCards()
-                refreshCards()
-            })
-            
-            ZStack {
-                ScrollView (.vertical, showsIndicators: false){
-                    LazyVStack(spacing: 20) {
-                        ForEach(savedCards) { card in
-                            card.view
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 5)
-                                        .stroke(Color(.systemGray3), lineWidth: 1)
-                                )
-                                .padding()
-                        }
-                    }
+        ZStack(alignment: .bottom) {
+            VStack {
+                TabHeader(title: "Content Cards", refreshAction: {
+                    refreshCards()
+                }, redownloadAction: {
+                    downloadCards()
+                    refreshCards()
+                })
+                
+                if let containerView = container?.view {
+                    containerView
+                        .border(Color.red, width: 2)
                 }
                 
-                if showLoadingIndicator {
-                    ProgressView("Loading...")
-                        .progressViewStyle(CircularProgressViewStyle())
-                        .padding()
-                        .background(Color.white.opacity(0.8))
-                        .cornerRadius(10)
-                        .shadow(radius: 10)
-                }
+                Spacer()
             }
+            
+            // Settings Pull Tab when settings are not visible
+            if !isSettingsVisible {
+                Image(systemName: "chevron.up")
+                    .font(.system(size: 20, weight: .medium))
+                    .foregroundColor(Color(.systemGray3))
+                    .frame(height: 24)
+                    .frame(maxWidth: .infinity)
+                    .background(Color(.systemBackground))
+                    .cornerRadius(20, corners: [.topLeft, .topRight])
+                    .shadow(radius: 5)
+                    .onTapGesture {
+                        withAnimation(.spring()) {
+                            isSettingsVisible = true
+                        }
+                    }
+                    .padding(.horizontal)
+            }
+            
+            // Settings Panel
+            ContainerSettingsView(
+                isHorizontalScroll: $isHorizontalScroll,
+                showHeader: $showHeader,
+                isSettingsVisible: $isSettingsVisible,
+                onSettingsChanged: refreshCards
+            )
+            .padding(.horizontal)
+            .offset(y: isSettingsVisible ? 0 : UIScreen.main.bounds.height)
+            .animation(.spring(), value: isSettingsVisible)
         }
         .onAppear() {
             if !viewLoaded {
@@ -59,23 +77,33 @@ struct CardsView: View, ContentCardUIEventListening {
                 refreshCards()
             }
         }
-        
     }
     
     func refreshCards() {
         showLoadingIndicator = true
         let cardsPageSurface = Surface(path: Constants.SurfaceName.CONTENT_CARD)
-        Messaging.getContentCardsUI(for: cardsPageSurface,
+        var containerSettings = ContentCardContainerSetting()
+        containerSettings.spacing = 35
+        containerSettings.scrollDirection = isHorizontalScroll ? .horizontal : .vertical
+        
+        // Configure header settings        
+        if showHeader {
+            let headerTitle = AEPText(content: "Inbox Header")
+            headerTitle.font = .system(size: 18, weight: .medium)
+            headerTitle.textColor = Color(.label)
+            var headerSettings = HeaderSettings(title: headerTitle)
+            headerSettings.isVisible = true
+            headerSettings.backgroundColor = Color(.init(white: 0.95, alpha: 1))
+            headerSettings.height = 50
+            headerSettings.padding = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)            
+            containerSettings.header = headerSettings
+        }
+        
+        Messaging.getContentCardsContainerUI(for: cardsPageSurface,
                                      customizer: CardCustomizer(),
-                                     listener: self) { result in
-            showLoadingIndicator = false
-            switch result {
-            case .success(let cards):
-                // sort the cards by priority order and save them to our state property
-                savedCards = cards.sorted { $0.priority > $1.priority }
-            case .failure(let error):
-                print(error)
-            }
+                                     listener: self,
+                                     settings: containerSettings) { container in
+            self.container = container
         }
     }
     
@@ -90,7 +118,6 @@ struct CardsView: View, ContentCardUIEventListening {
     
     func onDismiss(_ card: ContentCardUI) {
         print("TestAppLog : ContentCard Dismissed")
-        savedCards.removeAll(where: { $0.id == card.id })
     }
     
     func onInteract(_ card: ContentCardUI, _ interactionId: String, actionURL: URL?) -> Bool {

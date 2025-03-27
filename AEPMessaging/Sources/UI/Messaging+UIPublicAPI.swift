@@ -62,4 +62,49 @@ public extension Messaging {
             completion(.success(cards))
         }
     }
+    
+    static func getContentCardsContainerUI(for surface: Surface,
+                                         customizer: ContentCardCustomizing? = nil,
+                                         listener: ContentCardUIEventListening? = nil,
+                                         settings: ContentCardContainerSetting = ContentCardContainerSetting(),
+                                         _ completion: @escaping (ContentCardContainerUI) -> Void) {
+        Messaging.getPropositionsForSurfaces([surface]) { propositionDict, error in
+
+            if let error = error {
+                Log.error(label: UIConstants.LOG_TAG,
+                          "Error retrieving content cards UI for surface, \(surface.uri). Error \(error)")
+                completion(ContentCardContainerUI([], settings: settings))
+                return
+            }
+
+            var cards: [ContentCardUI] = []
+
+            // unwrap the proposition items for the given surface. Bail out with error if unsuccessful
+            guard let propositions = propositionDict?[surface] else {
+                completion(ContentCardContainerUI([], settings: settings))
+                return
+            }
+
+            for proposition in propositions {
+                // attempt to create a ContentCardUI instance with the schema data.
+                guard let contentCard = ContentCardUI.createInstance(with: proposition,
+                                                                     customizer: customizer,
+                                                                     listener: listener) else {
+                    Log.warning(label: UIConstants.LOG_TAG,
+                                "Failed to create ContentCardUI for proposition with ID: \(proposition.uniqueId)")
+                    continue
+                }
+                
+                
+                
+
+                // append the successfully created content card to the cards array.
+                cards.append(contentCard)
+            }
+            
+            let container = ContentCardContainerUI(cards, settings: settings)
+
+            completion(container)
+        }
+    }
 }

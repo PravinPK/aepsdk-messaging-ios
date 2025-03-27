@@ -227,6 +227,9 @@
 		B64256B22D936BD600EDCAC5 /* Collection+PropositionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64256B12D936BD600EDCAC5 /* Collection+PropositionItem.swift */; };
 		B64256B42D936C1400EDCAC5 /* BatchedPropositionInteractionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64256B32D936C1400EDCAC5 /* BatchedPropositionInteractionTests.swift */; };
 		B64256B62D936C4300EDCAC5 /* CollectionPropositionItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64256B52D936C4300EDCAC5 /* CollectionPropositionItemTests.swift */; };
+		B642572A2D93DE0B00EDCAC5 /* ContentCardContainerUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64257292D93DE0B00EDCAC5 /* ContentCardContainerUI.swift */; };
+		B642572C2D93EFA600EDCAC5 /* ContentCardContainerSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = B642572B2D93EFA600EDCAC5 /* ContentCardContainerSetting.swift */; };
+		B642572E2D944F7100EDCAC5 /* ContainerSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B642572D2D944F7100EDCAC5 /* ContainerSettingsView.swift */; };
 		B67CCF772CD08D5500CF08D1 /* AEPAsyncImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67CCF762CD08D4D00CF08D1 /* AEPAsyncImageView.swift */; };
 		B67CCF792CD0BF8D00CF08D1 /* ContentCardImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67CCF782CD0BF8700CF08D1 /* ContentCardImageCache.swift */; };
 		B69573C82CD4447F0027E376 /* AEPBundleImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69573C72CD444790027E376 /* AEPBundleImageView.swift */; };
@@ -685,6 +688,9 @@
 		B64256B12D936BD600EDCAC5 /* Collection+PropositionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+PropositionItem.swift"; sourceTree = "<group>"; };
 		B64256B32D936C1400EDCAC5 /* BatchedPropositionInteractionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchedPropositionInteractionTests.swift; sourceTree = "<group>"; };
 		B64256B52D936C4300EDCAC5 /* CollectionPropositionItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionPropositionItemTests.swift; sourceTree = "<group>"; };
+		B64257292D93DE0B00EDCAC5 /* ContentCardContainerUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentCardContainerUI.swift; sourceTree = "<group>"; };
+		B642572B2D93EFA600EDCAC5 /* ContentCardContainerSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentCardContainerSetting.swift; sourceTree = "<group>"; };
+		B642572D2D944F7100EDCAC5 /* ContainerSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerSettingsView.swift; sourceTree = "<group>"; };
 		B67CCF762CD08D4D00CF08D1 /* AEPAsyncImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPAsyncImageView.swift; sourceTree = "<group>"; };
 		B67CCF782CD0BF8700CF08D1 /* ContentCardImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentCardImageCache.swift; sourceTree = "<group>"; };
 		B69573C72CD444790027E376 /* AEPBundleImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPBundleImageView.swift; sourceTree = "<group>"; };
@@ -1270,6 +1276,15 @@
 			path = TestApps/MessagingDemoApp/NotificationService;
 			sourceTree = "<group>";
 		};
+		B64257282D93DDD700EDCAC5 /* ContentCardContainer */ = {
+			isa = PBXGroup;
+			children = (
+				B642572B2D93EFA600EDCAC5 /* ContentCardContainerSetting.swift */,
+				B64257292D93DE0B00EDCAC5 /* ContentCardContainerUI.swift */,
+			);
+			path = ContentCardContainer;
+			sourceTree = "<group>";
+		};
 		B6F7CBA12CC2089A00C35C64 /* Template */ = {
 			isa = PBXGroup;
 			children = (
@@ -1388,6 +1403,7 @@
 		B6F7CBC82CC2089A00C35C64 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				B64257282D93DDD700EDCAC5 /* ContentCardContainer */,
 				B6F7CBC52CC2089A00C35C64 /* ContentCards */,
 				B6F7CBC62CC2089A00C35C64 /* Messaging+UIPublicAPI.swift */,
 				B6F7CBC72CC2089A00C35C64 /* UIConstants.swift */,
@@ -1497,6 +1513,7 @@
 		B6F7CC922CC80DE500C35C64 /* ElementViews */ = {
 			isa = PBXGroup;
 			children = (
+				B642572D2D944F7100EDCAC5 /* ContainerSettingsView.swift */,
 				B6F7CC982CC874E500C35C64 /* TabHeader.swift */,
 				0969D63B2A7A0EF600A00BF7 /* CustomTextView.swift */,
 				0969D6352A760AF900A00BF7 /* CustomHtmlView.swift */,
@@ -2382,6 +2399,7 @@
 				091881F42A16C2A200615481 /* InAppView.swift in Sources */,
 				0969D6362A760AF900A00BF7 /* CustomHtmlView.swift in Sources */,
 				091881E72A16BAE300615481 /* MessagingDemoAppSwiftUIApp.swift in Sources */,
+				B642572E2D944F7100EDCAC5 /* ContainerSettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2480,6 +2498,7 @@
 				B6F7CBCE2CC2089A00C35C64 /* AEPDismissButton.swift in Sources */,
 				B6F7CBCF2CC2089A00C35C64 /* ContentCardUIEventListening.swift in Sources */,
 				B64256B22D936BD600EDCAC5 /* Collection+PropositionItem.swift in Sources */,
+				B642572C2D93EFA600EDCAC5 /* ContentCardContainerSetting.swift in Sources */,
 				B6F7CBD02CC2089A00C35C64 /* ContentCardUI+EventHandler.swift in Sources */,
 				B6F7CBD12CC2089A00C35C64 /* SmallImageTemplate.swift in Sources */,
 				B6F7CBD22CC2089A00C35C64 /* AEPTextView.swift in Sources */,
@@ -2497,6 +2516,7 @@
 				B6F7CBDD2CC2089A00C35C64 /* ContentCardCustomizing.swift in Sources */,
 				B6F7CBDE2CC2089A00C35C64 /* ContentCardTemplate.swift in Sources */,
 				B6F7CBDF2CC2089A00C35C64 /* ContentCardTemplateType.swift in Sources */,
+				B642572A2D93DE0B00EDCAC5 /* ContentCardContainerUI.swift in Sources */,
 				B6F7CBE02CC2089A00C35C64 /* AEPTextType.swift in Sources */,
 				B6F7CBE12CC2089A00C35C64 /* BaseTemplate.swift in Sources */,
 				B6F7CBE22CC2089A00C35C64 /* Messaging+UIPublicAPI.swift in Sources */,
@@ -2825,7 +2845,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.steveb.priorityTester;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.MessagingDemoAppSwiftUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -2858,7 +2878,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.steveb.priorityTester;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.MessagingDemoAppSwiftUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
