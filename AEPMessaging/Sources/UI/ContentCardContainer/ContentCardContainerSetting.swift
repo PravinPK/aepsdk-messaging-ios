@@ -22,6 +22,8 @@ public struct ContentCardContainerSetting {
     /// The spacing between content cards in the container
     public var spacing: CGFloat = 20
     
+    public var backgroundColor : Color = Color(.systemBackground)
+    
     /// The scroll direction of the container
     public var scrollDirection: ScrollDirection = .vertical
     
@@ -30,6 +32,9 @@ public struct ContentCardContainerSetting {
     
     /// Settings for displaying date and time
     public var displayDateTime: Bool = false
+    
+    /// Settings for pull-to-refresh functionality
+    public var pullToRefresh: PullToRefreshSettings = PullToRefreshSettings()
     
     /// Initializes a new ContentCardContainerSetting instance
     public init() {}
@@ -65,4 +70,22 @@ public struct HeaderSettings {
     public init(title: AEPText) {
         self.title = title
     }
+}
+
+/// Settings for pull-to-refresh functionality
+@available(iOS 15.0, *)
+public struct PullToRefreshSettings {
+    /// Whether pull-to-refresh is enabled
+    public var isEnabled: Bool = false
+    
+    /// The tint color for the refresh control
+    public var tintColor: Color = Color.accentColor
+    
+    /// The background color for the refresh control
+    public var backgroundColor: Color = Color.clear
+    
+    /// The attributed text to display during refresh
+    public var attributedText: AttributedString?
+    
+    public init() {}
 }

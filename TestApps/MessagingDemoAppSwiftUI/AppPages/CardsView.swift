@@ -86,16 +86,23 @@ struct CardsView: View, ContentCardUIEventListening {
         containerSettings.spacing = 35
         containerSettings.scrollDirection = isHorizontalScroll ? .horizontal : .vertical
         
+        // Configure pull-to-refresh settings
+        var pullToRefreshSettings = PullToRefreshSettings()
+        pullToRefreshSettings.isEnabled = true
+        pullToRefreshSettings.tintColor = Color.accentColor
+        pullToRefreshSettings.backgroundColor = Color(.systemBackground)
+        containerSettings.pullToRefresh = pullToRefreshSettings
+        
         // Configure header settings        
         if showHeader {
             let headerTitle = AEPText(content: "Inbox Header")
             headerTitle.font = .system(size: 18, weight: .medium)
-            headerTitle.textColor = Color(.label)
+            headerTitle.textColor = Color(.white)
             var headerSettings = HeaderSettings(title: headerTitle)
             headerSettings.isVisible = true
-            headerSettings.backgroundColor = Color(.init(white: 0.95, alpha: 1))
+            headerSettings.backgroundColor = Color(.systemBlue)
             headerSettings.height = 50
-            headerSettings.padding = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)            
+            headerSettings.padding = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
             containerSettings.header = headerSettings
         }
         

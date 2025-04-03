@@ -39,32 +39,43 @@ public class ContentCardContainerUI: Identifiable {
         self.settings = settings
     }
     
-    /// Constructs a SwiftUI view for displaying content cards in a scrollable stack.
-    /// - Returns: A SwiftUI view of the content card container
     private func buildContainerView() -> some View {
         VStack(spacing: 0) {
             if let header = settings.header, header.isVisible {
                 headerView(header)
             }
             
-            ScrollView(settings.scrollDirection == .vertical ? .vertical : .horizontal, showsIndicators: false) {
-                Group {
-                    if settings.scrollDirection == .vertical {
-                        LazyVStack(spacing: settings.spacing) {
-                            cardViews
-                        }
-                    } else {
-                        LazyHStack(spacing: settings.spacing) {
-                            cardViews
-                        }
+            buildScrollView()
+        }
+    }
+
+    @ViewBuilder
+    private func buildScrollView() -> some View {
+        let scrollView = ScrollView(settings.scrollDirection == .vertical ? .vertical : .horizontal, showsIndicators: false) {
+            Group {
+                if settings.scrollDirection == .vertical {
+                    LazyVStack(spacing: settings.spacing) {
+                        cardView
+                    }
+                } else {
+                    LazyHStack(spacing: settings.spacing) {
+                        cardView
                     }
                 }
             }
+        }.background(settings.backgroundColor)
+
+        if settings.pullToRefresh.isEnabled {
+            scrollView
+                .refreshable {
+                    print("code")
+                }
+        } else {
+            scrollView
         }
     }
     
-    /// Returns the styled card views
-    private var cardViews: some View {
+    private var cardView: some View {
         ForEach(contentCards) { card in
             card.view
                 .overlay(
@@ -75,7 +86,6 @@ public class ContentCardContainerUI: Identifiable {
         }
     }
     
-    /// Returns the header view
     private func headerView(_ header: HeaderSettings) -> some View {
         VStack {
             header.title.view
