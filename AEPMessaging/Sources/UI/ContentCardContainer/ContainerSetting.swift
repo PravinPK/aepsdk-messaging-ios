@@ -26,7 +26,7 @@ public struct ContainerSetting {
     
     public var layout: ContainerLayout = .vertical
     
-    public var header: HeaderSettings?
+    public var header: ContainerHeader?
     
     public var displayDateTime: Bool = false
     
@@ -45,24 +45,18 @@ public enum ContainerLayout {
 
 /// Settings for customizing the container header
 @available(iOS 15.0, *)
-public struct HeaderSettings {
-    /// Whether the header is visible
+public struct ContainerHeader {
+    
     public var isVisible: Bool = false
     
-    /// The title text configuration for the header
     public var title: AEPText
     
-    /// The background color for the header
     public var backgroundColor: Color = Color(.systemBackground)
     
-    /// The height of the header
     public var height: CGFloat = 60
     
-    /// The padding for the header content
     public var padding: EdgeInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
     
-    /// Initializes a new HeaderSettings instance with the required title
-    /// - Parameter title: The AEPText instance for the header title
     public init(title: AEPText) {
         self.title = title
     }
@@ -71,16 +65,9 @@ public struct HeaderSettings {
 /// Settings for pull-to-refresh functionality
 @available(iOS 15.0, *)
 public struct PullToRefreshSettings {
-    /// Whether pull-to-refresh is enabled
+    
     public var isEnabled: Bool = false
-    
-    /// The tint color for the refresh control
     public var tintColor: Color = Color.accentColor
-    
-    /// The background color for the refresh control
-    public var backgroundColor: Color = Color.clear
-    
-    /// The attributed text to display during refresh
     public var attributedText: AttributedString?
     
     public init() {}
@@ -88,23 +75,14 @@ public struct PullToRefreshSettings {
 
 @available(iOS 15.0, *)
 public struct UnreadState {
-
     public var isEnabled : Bool = false
-
-    public var backgroundColor : Color = Color.accentColor        
+    public var backgroundColor : Color = Color.accentColor
     
     public var icon : AEPImage?
-
-    public var iconPosition : UnreadPosition = .topLeft
+    public var iconPosition : Alignment = .topLeading
+    
+    public var barColor : Color = Color.blue
+    public var barPosition : Alignment = .leading
+    public var barThickness : CGFloat = 0
 }
-
-public enum UnreadPosition {
-    case topLeft
-    case topRight
-    case right
-    case left
-    case bottomLeft
-    case bottomRight    
-}
-
 

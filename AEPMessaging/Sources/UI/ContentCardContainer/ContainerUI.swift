@@ -37,11 +37,24 @@ public class ContainerUI: Identifiable {
     init(_ contentCards: [ContentCardUI], settings: ContainerSetting = ContainerSetting()) {
         self.contentCards = contentCards
         self.settings = settings
+        
+        let unreadState = settings.unreadState
+        
+        if unreadState.isEnabled {
+            for card in contentCards {
+                if ((card.meta?["unread"]) != nil) {
+                    card.template.backgroundColor = unreadState.backgroundColor
+                    card.template.addOverlay(
+                        Text("NEW").foregroundStyle(.red) .padding(EdgeInsets(top: 20, leading: 30, bottom: 0, trailing: 0)), alignment: .topLeading
+                    )
+                }
+            }
+        }
     }
     
     private func buildContainerView() -> some View {
         VStack(spacing: 0) {
-            if let header: HeaderSettings = settings.header, header.isVisible {
+            if let header = settings.header, header.isVisible {
                 headerView(header)
             }
             
@@ -51,9 +64,9 @@ public class ContainerUI: Identifiable {
 
     @ViewBuilder
     private func buildScrollView() -> some View {
-        let scrollView = ScrollView(settings.scrollDirection == .vertical ? .vertical : .horizontal, showsIndicators: false) {
+        let scrollView = ScrollView(settings.layout == .vertical ? .vertical : .horizontal, showsIndicators: false) {
             Group {
-                if settings.scrollDirection == .vertical {
+                if settings.layout == .vertical {
                     LazyVStack(spacing: settings.spacing) {
                         cardView
                     }
@@ -86,7 +99,7 @@ public class ContainerUI: Identifiable {
         }
     }
     
-    private func headerView(_ header: HeaderSettings) -> some View {
+    private func headerView(_ header: ContainerHeader) -> some View {
         VStack {
             header.title.view
                 .frame(maxWidth: .infinity)

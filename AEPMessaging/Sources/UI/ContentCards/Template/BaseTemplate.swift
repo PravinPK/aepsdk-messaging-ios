@@ -34,6 +34,9 @@ public class BaseTemplate: ObservableObject {
     /// the dismiss button model
     @Published public var dismissButton: AEPDismissButton?
 
+    /// Array of overlays to be displayed on the content card
+    @Published public var overlays: [(view: AnyView, alignment: Alignment)] = []
+
     /// An optional handler that conforms to the `TemplateEventHandler` protocol.
     /// Use this property to assign a listener that will handle events related to the content card's interactions.
     weak var eventHandler: TemplateEventHandler?
@@ -73,5 +76,31 @@ public class BaseTemplate: ObservableObject {
                             .padding(UIConstants.CardTemplate.DefaultStyle.PADDING)
                     }
                 })
+            .overlay(content: {
+                ForEach(0..<overlays.count, id: \.self) { [self] index in
+                    overlays[index].view
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: overlays[index].alignment)
+                }
+            })
+    }
+    
+    /// Adds an overlay to the content card
+    /// - Parameters:
+    ///   - overlay: The view to be added as an overlay
+    ///   - alignment: The alignment of the overlay (default: .center)
+    public func addOverlay<Overlay: View>(_ overlay: Overlay, alignment: Alignment = .center) {
+        overlays.append((view: AnyView(overlay), alignment: alignment))
+    }
+    
+    /// Removes all overlays from the content card
+    public func removeAllOverlays() {
+        overlays.removeAll()
+    }
+    
+    /// Removes a specific overlay at the given index
+    /// - Parameter index: The index of the overlay to remove
+    public func removeOverlay(at index: Int) {
+        guard index >= 0 && index < overlays.count else { return }
+        overlays.remove(at: index)
     }
 }

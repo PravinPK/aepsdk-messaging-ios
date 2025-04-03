@@ -68,7 +68,7 @@ struct ContainerSettingsView: View {
                                         let headerTitle = AEPText(content: settings.header?.title.content ?? "Inbox Header")
                                         headerTitle.font = settings.header?.title.font ?? .system(size: 18, weight: .medium)
                                         headerTitle.textColor = settings.header?.title.textColor ?? Color(.white)
-                                        var headerSettings = HeaderSettings(title: headerTitle)
+                                        var headerSettings = ContainerHeader(title: headerTitle)
                                         headerSettings.isVisible = true
                                         headerSettings.backgroundColor = settings.header?.backgroundColor ?? Color(.systemBlue)
                                         headerSettings.height = settings.header?.height ?? 50
@@ -173,18 +173,21 @@ struct ContainerSettingsView: View {
                                         .padding(.top, 8)
                                     
                                     Picker("Icon Position", selection: Binding(
-                                        get: { settings.unreadState.iconPosition },
+                                        get: { IconPosition(from: settings.unreadState.iconPosition) },
                                         set: { position in
-                                            settings.unreadState.iconPosition = position
+                                            settings.unreadState.iconPosition = position.alignment
                                             onSettingsChanged(settings)
                                         }
                                     )) {
-                                        Text("Top Left").tag(UnreadPosition.topLeft)
-                                        Text("Top Right").tag(UnreadPosition.topRight)
-                                        Text("Right").tag(UnreadPosition.right)
-                                        Text("Left").tag(UnreadPosition.left)
-                                        Text("Bottom Left").tag(UnreadPosition.bottomLeft)
-                                        Text("Bottom Right").tag(UnreadPosition.bottomRight)
+                                        Text("Top Left").tag(IconPosition.topLeading)
+                                        Text("Top Right").tag(IconPosition.topTrailing)
+                                        Text("Bottom Left").tag(IconPosition.bottomLeading)
+                                        Text("Bottom Right").tag(IconPosition.bottomTrailing)
+                                        Text("Top").tag(IconPosition.top)
+                                        Text("Bottom").tag(IconPosition.bottom)
+                                        Text("Leading").tag(IconPosition.leading)
+                                        Text("Trailing").tag(IconPosition.trailing)
+                                        Text("Center").tag(IconPosition.center)
                                     }
                                     .pickerStyle(.menu)
                                     
@@ -264,5 +267,48 @@ struct RoundedCorner: Shape {
         let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners,
                               cornerRadii: CGSize(width: radius, height: radius))
         return Path(path.cgPath)
+    }
+}
+
+// Define a custom enum for alignment options
+enum IconPosition: Hashable {
+    case topLeading
+    case topTrailing
+    case bottomLeading
+    case bottomTrailing
+    case top
+    case bottom
+    case leading
+    case trailing
+    case center
+
+    // Map to SwiftUI Alignment
+    var alignment: Alignment {
+        switch self {
+        case .topLeading: return .topLeading
+        case .topTrailing: return .topTrailing
+        case .bottomLeading: return .bottomLeading
+        case .bottomTrailing: return .bottomTrailing
+        case .top: return .top
+        case .bottom: return .bottom
+        case .leading: return .leading
+        case .trailing: return .trailing
+        case .center: return .center
+        }
+    }
+
+    init(from alignment: Alignment) {
+        switch alignment {
+        case .topLeading: self = .topLeading
+        case .topTrailing: self = .topTrailing
+        case .bottomLeading: self = .bottomLeading
+        case .bottomTrailing: self = .bottomTrailing
+        case .top: self = .top
+        case .bottom: self = .bottom
+        case .leading: self = .leading
+        case .trailing: self = .trailing
+        case .center: self = .center
+        default: self = .topLeading
+        }
     }
 }
