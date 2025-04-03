@@ -37,18 +37,11 @@ public class ContainerUI: Identifiable {
     init(_ contentCards: [ContentCardUI], settings: ContainerSetting = ContainerSetting()) {
         self.contentCards = contentCards
         self.settings = settings
-        
-        let unreadState = settings.unreadState
-        if unreadState.isEnabled {
-            for card in contentCards {
-                card.template.backgroundColor = unreadState.backgroundColor
-            }
-        }
     }
     
     private func buildContainerView() -> some View {
         VStack(spacing: 0) {
-            if let header = settings.header, header.isVisible {
+            if let header: HeaderSettings = settings.header, header.isVisible {
                 headerView(header)
             }
             
@@ -58,9 +51,9 @@ public class ContainerUI: Identifiable {
 
     @ViewBuilder
     private func buildScrollView() -> some View {
-        let scrollView = ScrollView(settings.layout == .vertical ? .vertical : .horizontal, showsIndicators: false) {
+        let scrollView = ScrollView(settings.scrollDirection == .vertical ? .vertical : .horizontal, showsIndicators: false) {
             Group {
-                if settings.layout == .vertical {
+                if settings.scrollDirection == .vertical {
                     LazyVStack(spacing: settings.spacing) {
                         cardView
                     }

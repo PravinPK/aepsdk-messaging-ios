@@ -16,27 +16,26 @@ import SwiftUI
 struct CardsView: View, ContentCardUIEventListening {
     
     let cardsSurface = Surface(path: Constants.SurfaceName.CONTENT_CARD)
-    @State var container : ContentCardContainerUI?
+    @State var container : ContainerUI?
     @State private var viewLoaded: Bool = false
     @State private var showLoadingIndicator: Bool = false
     @State private var isSettingsVisible: Bool = false
-    @State private var containerSettings: ContentCardContainerSetting = ContentCardContainerSetting()
+    @State private var containerSettings: ContainerSetting = ContainerSetting()
     
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack {
-                TabHeader(title: "Content Cards", refreshAction: {
-                    refreshCards()
-                }, redownloadAction: {
-                    downloadCards()
-                    refreshCards()
-                })
+                // TabHeader(title: "Content Cards", refreshAction: {
+                //     refreshCards()
+                // }, redownloadAction: {
+                //     downloadCards()
+                //     refreshCards()
+                // })
                 
                 if let containerView = container?.view {
                     containerView
                         .border(Color.red, width: 2)
-                }
-                
+                }                
                 Spacer()
             }
             

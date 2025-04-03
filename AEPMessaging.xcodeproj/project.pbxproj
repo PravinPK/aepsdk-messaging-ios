@@ -228,7 +228,7 @@
 		B64256B42D936C1400EDCAC5 /* BatchedPropositionInteractionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64256B32D936C1400EDCAC5 /* BatchedPropositionInteractionTests.swift */; };
 		B64256B62D936C4300EDCAC5 /* CollectionPropositionItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64256B52D936C4300EDCAC5 /* CollectionPropositionItemTests.swift */; };
 		B642572A2D93DE0B00EDCAC5 /* ContentCardContainerUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64257292D93DE0B00EDCAC5 /* ContentCardContainerUI.swift */; };
-		B642572C2D93EFA600EDCAC5 /* ContentCardContainerSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = B642572B2D93EFA600EDCAC5 /* ContentCardContainerSetting.swift */; };
+		B642572C2D93EFA600EDCAC5 /* ContainerSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = B642572B2D93EFA600EDCAC5 /* ContainerSetting.swift */; };
 		B642572E2D944F7100EDCAC5 /* ContainerSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B642572D2D944F7100EDCAC5 /* ContainerSettingsView.swift */; };
 		B67CCF772CD08D5500CF08D1 /* AEPAsyncImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67CCF762CD08D4D00CF08D1 /* AEPAsyncImageView.swift */; };
 		B67CCF792CD0BF8D00CF08D1 /* ContentCardImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67CCF782CD0BF8700CF08D1 /* ContentCardImageCache.swift */; };
@@ -689,7 +689,7 @@
 		B64256B32D936C1400EDCAC5 /* BatchedPropositionInteractionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchedPropositionInteractionTests.swift; sourceTree = "<group>"; };
 		B64256B52D936C4300EDCAC5 /* CollectionPropositionItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionPropositionItemTests.swift; sourceTree = "<group>"; };
 		B64257292D93DE0B00EDCAC5 /* ContentCardContainerUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentCardContainerUI.swift; sourceTree = "<group>"; };
-		B642572B2D93EFA600EDCAC5 /* ContentCardContainerSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentCardContainerSetting.swift; sourceTree = "<group>"; };
+		B642572B2D93EFA600EDCAC5 /* ContainerSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerSetting.swift; sourceTree = "<group>"; };
 		B642572D2D944F7100EDCAC5 /* ContainerSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerSettingsView.swift; sourceTree = "<group>"; };
 		B67CCF762CD08D4D00CF08D1 /* AEPAsyncImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPAsyncImageView.swift; sourceTree = "<group>"; };
 		B67CCF782CD0BF8700CF08D1 /* ContentCardImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentCardImageCache.swift; sourceTree = "<group>"; };
@@ -1279,7 +1279,7 @@
 		B64257282D93DDD700EDCAC5 /* ContentCardContainer */ = {
 			isa = PBXGroup;
 			children = (
-				B642572B2D93EFA600EDCAC5 /* ContentCardContainerSetting.swift */,
+				B642572B2D93EFA600EDCAC5 /* ContainerSetting.swift */,
 				B64257292D93DE0B00EDCAC5 /* ContentCardContainerUI.swift */,
 			);
 			path = ContentCardContainer;
@@ -2498,7 +2498,7 @@
 				B6F7CBCE2CC2089A00C35C64 /* AEPDismissButton.swift in Sources */,
 				B6F7CBCF2CC2089A00C35C64 /* ContentCardUIEventListening.swift in Sources */,
 				B64256B22D936BD600EDCAC5 /* Collection+PropositionItem.swift in Sources */,
-				B642572C2D93EFA600EDCAC5 /* ContentCardContainerSetting.swift in Sources */,
+				B642572C2D93EFA600EDCAC5 /* ContainerSetting.swift in Sources */,
 				B6F7CBD02CC2089A00C35C64 /* ContentCardUI+EventHandler.swift in Sources */,
 				B6F7CBD12CC2089A00C35C64 /* SmallImageTemplate.swift in Sources */,
 				B6F7CBD22CC2089A00C35C64 /* AEPTextView.swift in Sources */,

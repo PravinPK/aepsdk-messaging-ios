@@ -66,14 +66,14 @@ public extension Messaging {
     static func getContentCardsContainerUI(for surface: Surface,
                                          customizer: ContentCardCustomizing? = nil,
                                          listener: ContentCardUIEventListening? = nil,
-                                         settings: ContentCardContainerSetting = ContentCardContainerSetting(),
-                                         _ completion: @escaping (ContentCardContainerUI) -> Void) {
+                                         settings: ContainerSetting = ContainerSetting(),
+                                         _ completion: @escaping (ContainerUI) -> Void) {
         Messaging.getPropositionsForSurfaces([surface]) { propositionDict, error in
 
             if let error = error {
                 Log.error(label: UIConstants.LOG_TAG,
                           "Error retrieving content cards UI for surface, \(surface.uri). Error \(error)")
-                completion(ContentCardContainerUI([], settings: settings))
+                completion(ContainerUI([], settings: settings))
                 return
             }
 
@@ -81,7 +81,7 @@ public extension Messaging {
 
             // unwrap the proposition items for the given surface. Bail out with error if unsuccessful
             guard let propositions = propositionDict?[surface] else {
-                completion(ContentCardContainerUI([], settings: settings))
+                completion(ContainerUI([], settings: settings))
                 return
             }
 
@@ -94,16 +94,12 @@ public extension Messaging {
                                 "Failed to create ContentCardUI for proposition with ID: \(proposition.uniqueId)")
                     continue
                 }
-                
-                
-                
 
                 // append the successfully created content card to the cards array.
                 cards.append(contentCard)
             }
             
-            let container = ContentCardContainerUI(cards, settings: settings)
-
+            let container = ContainerUI(cards, settings: settings)
             completion(container)
         }
     }

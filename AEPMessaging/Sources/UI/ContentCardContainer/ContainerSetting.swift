@@ -18,31 +18,27 @@ import Foundation
 
 /// Settings for customizing the appearance of the ContentCardContainer
 @available(iOS 15.0, *)
-public struct ContentCardContainerSetting {
+public struct ContainerSetting {
     /// The spacing between content cards in the container
     public var spacing: CGFloat = 20
     
     public var backgroundColor : Color = Color(.systemBackground)
     
-    /// The scroll direction of the container
-    public var scrollDirection: ScrollDirection = .vertical
+    public var layout: ContainerLayout = .vertical
     
-    /// Settings for the container header
     public var header: HeaderSettings?
     
-    /// Settings for displaying date and time
     public var displayDateTime: Bool = false
     
-    /// Settings for pull-to-refresh functionality
     public var pullToRefresh: PullToRefreshSettings = PullToRefreshSettings()
+
+    public var unreadState: UnreadState = UnreadState()
     
-    /// Initializes a new ContentCardContainerSetting instance
     public init() {}
 }
 
-
 /// Enum defining the possible scroll directions
-public enum ScrollDirection {
+public enum ContainerLayout {
     case vertical
     case horizontal
 }
@@ -89,3 +85,26 @@ public struct PullToRefreshSettings {
     
     public init() {}
 }
+
+@available(iOS 15.0, *)
+public struct UnreadState {
+
+    public var isEnabled : Bool = false
+
+    public var backgroundColor : Color = Color.accentColor        
+    
+    public var icon : AEPImage?
+
+    public var iconPosition : UnreadPosition = .topLeft
+}
+
+public enum UnreadPosition {
+    case topLeft
+    case topRight
+    case right
+    case left
+    case bottomLeft
+    case bottomRight    
+}
+
+
