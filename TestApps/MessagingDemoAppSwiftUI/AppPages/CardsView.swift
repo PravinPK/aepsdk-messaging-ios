@@ -19,10 +19,8 @@ struct CardsView: View, ContentCardUIEventListening {
     @State var container : ContentCardContainerUI?
     @State private var viewLoaded: Bool = false
     @State private var showLoadingIndicator: Bool = false
-    @State private var isHorizontalScroll: Bool = false
-    @State private var showHeader: Bool = true
     @State private var isSettingsVisible: Bool = false
-    @State private var settingsOffset: CGFloat = UIScreen.main.bounds.height
+    @State private var containerSettings: ContentCardContainerSetting = ContentCardContainerSetting()
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -62,10 +60,11 @@ struct CardsView: View, ContentCardUIEventListening {
             
             // Settings Panel
             ContainerSettingsView(
-                isHorizontalScroll: $isHorizontalScroll,
-                showHeader: $showHeader,
                 isSettingsVisible: $isSettingsVisible,
-                onSettingsChanged: refreshCards
+                onSettingsChanged: { newSettings in
+                    containerSettings = newSettings
+                    refreshCards()
+                }
             )
             .padding(.horizontal)
             .offset(y: isSettingsVisible ? 0 : UIScreen.main.bounds.height)
@@ -81,32 +80,7 @@ struct CardsView: View, ContentCardUIEventListening {
     
     func refreshCards() {
         showLoadingIndicator = true
-        let cardsPageSurface = Surface(path: Constants.SurfaceName.CONTENT_CARD)
-        var containerSettings = ContentCardContainerSetting()
-        containerSettings.spacing = 35
-        containerSettings.scrollDirection = isHorizontalScroll ? .horizontal : .vertical
-        
-        // Configure pull-to-refresh settings
-        var pullToRefreshSettings = PullToRefreshSettings()
-        pullToRefreshSettings.isEnabled = true
-        pullToRefreshSettings.tintColor = Color.accentColor
-        pullToRefreshSettings.backgroundColor = Color(.systemBackground)
-        containerSettings.pullToRefresh = pullToRefreshSettings
-        
-        // Configure header settings        
-        if showHeader {
-            let headerTitle = AEPText(content: "Inbox Header")
-            headerTitle.font = .system(size: 18, weight: .medium)
-            headerTitle.textColor = Color(.white)
-            var headerSettings = HeaderSettings(title: headerTitle)
-            headerSettings.isVisible = true
-            headerSettings.backgroundColor = Color(.systemBlue)
-            headerSettings.height = 50
-            headerSettings.padding = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
-            containerSettings.header = headerSettings
-        }
-        
-        Messaging.getContentCardsContainerUI(for: cardsPageSurface,
+        Messaging.getContentCardsContainerUI(for: cardsSurface,
                                      customizer: CardCustomizer(),
                                      listener: self,
                                      settings: containerSettings) { container in

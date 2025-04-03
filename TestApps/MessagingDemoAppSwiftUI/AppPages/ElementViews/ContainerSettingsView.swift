@@ -1,10 +1,16 @@
 import SwiftUI
+import AEPMessaging
 
 struct ContainerSettingsView: View {
-    @Binding var isHorizontalScroll: Bool
-    @Binding var showHeader: Bool
     @Binding var isSettingsVisible: Bool
-    let onSettingsChanged: () -> Void
+    @State private var settings: ContentCardContainerSetting
+    let onSettingsChanged: (ContentCardContainerSetting) -> Void
+    
+    init(isSettingsVisible: Binding<Bool>, onSettingsChanged: @escaping (ContentCardContainerSetting) -> Void) {
+        self._isSettingsVisible = isSettingsVisible
+        self._settings = State(initialValue: ContentCardContainerSetting())
+        self.onSettingsChanged = onSettingsChanged
+    }
     
     var body: some View {
         VStack(spacing: 0) {
@@ -29,15 +35,41 @@ struct ContainerSettingsView: View {
                 
                 // Settings Controls
                 VStack(spacing: 16) {
-                    Toggle("Horizontal Scroll", isOn: $isHorizontalScroll)
-                        .onChange(of: isHorizontalScroll) { _ in
-                            onSettingsChanged()
+                    Toggle("Horizontal Scroll", isOn: Binding(
+                        get: { settings.scrollDirection == .horizontal },
+                        set: { isHorizontal in
+                            settings.scrollDirection = isHorizontal ? .horizontal : .vertical
+                            onSettingsChanged(settings)
                         }
+                    ))
                     
-                    Toggle("Show Header", isOn: $showHeader)
-                        .onChange(of: showHeader) { _ in
-                            onSettingsChanged()
+                    Toggle("Show Header", isOn: Binding(
+                        get: { settings.header?.isVisible ?? false },
+                        set: { showHeader in
+                            if showHeader {
+                                let headerTitle = AEPText(content: "Inbox Header")
+                                headerTitle.font = .system(size: 18, weight: .medium)
+                                headerTitle.textColor = Color(.white)
+                                var headerSettings = HeaderSettings(title: headerTitle)
+                                headerSettings.isVisible = true
+                                headerSettings.backgroundColor = Color(.systemBlue)
+                                headerSettings.height = 50
+                                headerSettings.padding = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
+                                settings.header = headerSettings
+                            } else {
+                                settings.header = nil
+                            }
+                            onSettingsChanged(settings)
                         }
+                    ))
+                    
+                    Toggle("Pull to Refresh", isOn: Binding(
+                        get: { settings.pullToRefresh.isEnabled },
+                        set: { isEnabled in
+                            settings.pullToRefresh.isEnabled = isEnabled
+                            onSettingsChanged(settings)
+                        }
+                    ))
                 }
                 .padding()
             }
