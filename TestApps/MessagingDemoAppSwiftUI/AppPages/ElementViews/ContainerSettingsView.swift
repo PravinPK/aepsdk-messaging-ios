@@ -65,6 +65,49 @@ struct ContainerSettingsView: View {
                                 .keyboardType(.numberPad)
                             }
                             
+                            // Card Dimensions
+                            HStack {
+                                Text("Card Height")
+                                Spacer()
+                                TextField("Height", value: Binding(
+                                    get: { settings.cardHeight.map { Double($0) } ?? 0 },
+                                    set: { newHeight in
+                                        settings.cardHeight = newHeight > 0 ? CGFloat(newHeight) : nil
+                                        onSettingsChanged(settings)
+                                    }
+                                ), format: .number)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .frame(width: 80)
+                                .keyboardType(.numberPad)
+                                .onChange(of: settings.cardHeight) { newValue in
+                                    if let height = newValue, height < 0 {
+                                        settings.cardHeight = nil
+                                        onSettingsChanged(settings)
+                                    }
+                                }
+                            }
+                            
+                            HStack {
+                                Text("Card Width")
+                                Spacer()
+                                TextField("Width", value: Binding(
+                                    get: { settings.cardWidth.map { Double($0) } ?? 0 },
+                                    set: { newWidth in
+                                        settings.cardWidth = newWidth > 0 ? CGFloat(newWidth) : nil
+                                        onSettingsChanged(settings)
+                                    }
+                                ), format: .number)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .frame(width: 80)
+                                .keyboardType(.numberPad)
+                                .onChange(of: settings.cardWidth) { newValue in
+                                    if let width = newValue, width < 0 {
+                                        settings.cardWidth = nil
+                                        onSettingsChanged(settings)
+                                    }
+                                }
+                            }
+                            
                             ColorPicker("Container Background", selection: Binding(
                                 get: { settings.backgroundColor },
                                 set: { color in

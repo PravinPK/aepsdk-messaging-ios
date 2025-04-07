@@ -36,6 +36,10 @@ public struct ContainerSetting {
     
     public var emptyState: EmptyState = EmptyState()
     
+    public var cardHeight: CGFloat? = nil
+    
+    public var cardWidth: CGFloat? = nil
+    
     public init() {}
 }
 

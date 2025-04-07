@@ -197,6 +197,10 @@ public class ContainerUI: Identifiable, ObservableObject {
     var cardView: some View {
         ForEach(contentCards) { card in
             card.view
+                .frame(
+                    width: (self.settings.cardWidth ?? .infinity) > 0 ? self.settings.cardWidth : .infinity,
+                    height: (self.settings.cardHeight ?? .infinity) > 0 ? self.settings.cardHeight : .infinity
+                )
                 .overlay(
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(Color(.systemGray3), lineWidth: 1)
