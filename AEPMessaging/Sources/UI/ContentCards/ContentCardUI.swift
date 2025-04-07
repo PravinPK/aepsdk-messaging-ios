@@ -12,6 +12,7 @@
 
 #if canImport(SwiftUI)
     import SwiftUI
+    import Combine
 #endif
 
 import AEPServices
@@ -39,12 +40,16 @@ public class ContentCardUI: Identifiable {
 
     /// SwiftUI view that represents the content card
     /// TODO: Make adjustments to remove AnyView
-    public lazy var view: some View = AnyView(template.view)
+    public lazy var view: some View = AnyView(template.view.applyModifier(unreadModifier))
 
     /// Metadata associated with the ContentCard
     public var meta: [String: Any]? {
         proposition.items.first?.contentCardSchemaData?.meta
     }
+    
+    @Published public var modifier: AEPViewModifier?
+    
+    @Published public var unreadModifier: AEPViewModifier?
 
     /// Factory method to create a `ContentCardUI` instance based on the provided schema data.
     /// - Parameters:

@@ -10,6 +10,10 @@
  governing permissions and limitations under the License.
  */
 
+#if canImport(SwiftUI)
+    import SwiftUI
+#endif
+
 import AEPServices
 import Foundation
 
@@ -63,44 +67,20 @@ public extension Messaging {
         }
     }
     
+    /// Creates a new ContainerUI instance for the given surface.
+    /// - Parameters:
+    ///   - surface: The surface for which to create the container.
+    ///   - customizer: Optional customizer for content cards.
+    ///   - listener: Optional listener for content card events.
+    ///   - settings: Optional settings to customize the container appearance.
+    /// - Returns: A new ContainerUI instance that can be used to display and manage content cards.
     static func getContentCardsContainerUI(for surface: Surface,
-                                         customizer: ContentCardCustomizing? = nil,
-                                         listener: ContentCardUIEventListening? = nil,
-                                         settings: ContainerSetting = ContainerSetting(),
-                                         _ completion: @escaping (ContainerUI) -> Void) {
-        Messaging.getPropositionsForSurfaces([surface]) { propositionDict, error in
-
-            if let error = error {
-                Log.error(label: UIConstants.LOG_TAG,
-                          "Error retrieving content cards UI for surface, \(surface.uri). Error \(error)")
-                completion(ContainerUI([], settings: settings))
-                return
-            }
-
-            var cards: [ContentCardUI] = []
-
-            // unwrap the proposition items for the given surface. Bail out with error if unsuccessful
-            guard let propositions = propositionDict?[surface] else {
-                completion(ContainerUI([], settings: settings))
-                return
-            }
-
-            for proposition in propositions {
-                // attempt to create a ContentCardUI instance with the schema data.
-                guard let contentCard = ContentCardUI.createInstance(with: proposition,
-                                                                     customizer: customizer,
-                                                                     listener: listener) else {
-                    Log.warning(label: UIConstants.LOG_TAG,
-                                "Failed to create ContentCardUI for proposition with ID: \(proposition.uniqueId)")
-                    continue
-                }
-
-                // append the successfully created content card to the cards array.
-                cards.append(contentCard)
-            }
-            
-            let container = ContainerUI(cards, settings: settings)
-            completion(container)
-        }
+                                          customizer: ContentCardCustomizing? = nil,
+                                          listener: ContentCardUIEventListening? = nil,
+                                          settings: ContainerSetting = ContainerSetting()) -> ContainerUI {
+        return ContainerUI(surface: surface,
+                         customizer: customizer,
+                         listener: listener,
+                         settings: settings)
     }
 }

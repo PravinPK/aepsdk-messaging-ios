@@ -34,6 +34,8 @@ public struct ContainerSetting {
 
     public var unreadState: UnreadState = UnreadState()
     
+    public var emptyState: EmptyState = EmptyState()
+    
     public init() {}
 }
 
@@ -76,13 +78,20 @@ public struct PullToRefreshSettings {
 @available(iOS 15.0, *)
 public struct UnreadState {
     public var isEnabled : Bool = false
-    public var backgroundColor : Color = Color.accentColor
+    public var backgroundColor : Color?
     
     public var icon : AEPImage?
     public var iconPosition : Alignment = .topLeading
     
     public var barColor : Color = Color.blue
     public var barPosition : Alignment = .leading
-    public var barThickness : CGFloat = 0
+    public var barThickness : CGFloat?
+}
+
+
+@available(iOS 15.0, *)
+public struct EmptyState {
+    public var message = AEPText(content: "no content")
+    public var image: AEPImage?
 }
 

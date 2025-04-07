@@ -20,19 +20,19 @@
 @available(iOS 15.0, *)
 public class AEPImage: ObservableObject, AEPViewModel {
     /// The URL of the image to be displayed.
-    var url: URL?
+    public var url: URL?
 
     /// The URL of the dark mode image to be displayed.
-    var darkUrl: URL?
+    public var darkUrl: URL?
 
     /// The alternate text for the image for accessibility purpose.
-    var altText: String?
+    public var altText: String?
 
     /// The name of the image bundled resource.
-    var bundle: String?
+    public var bundle: String?
 
     /// The name of the dark mode image bundled resource.
-    var darkBundle: String?
+    public var darkBundle: String?
 
     /// The name of the SF Symbol icon used in the image
     @Published public var icon: String?
@@ -55,7 +55,43 @@ public class AEPImage: ObservableObject, AEPViewModel {
 
     lazy var view: some View = AEPImageView(model: self)
 
-    /// Initializes a new instance of `AEPImage`
+    /// Initializes a new instance of `AEPImage` from a URL
+    /// - Parameters:
+    ///   - url: The URL of the image
+    ///   - darkUrl: Optional URL for dark mode image
+    ///   - altText: Optional alternate text for accessibility
+    public init(url: URL, darkUrl: URL? = nil, altText: String? = nil) {
+        self.imageSourceType = .url
+        self.url = url
+        self.darkUrl = darkUrl
+        self.altText = altText
+    }
+
+    /// Initializes a new instance of `AEPImage` from a bundled resource
+    /// - Parameters:
+    ///   - bundle: The name of the bundled resource
+    ///   - darkBundle: Optional name of the dark mode bundled resource
+    ///   - altText: Optional alternate text for accessibility
+    public init(bundle: String, darkBundle: String? = nil, altText: String? = nil) {
+        self.imageSourceType = .bundle
+        self.bundle = bundle
+        self.darkBundle = darkBundle
+        self.altText = altText
+    }
+
+    /// Initializes a new instance of `AEPImage` from an SF Symbol
+    /// - Parameters:
+    ///   - icon: The name of the SF Symbol
+    ///   - font: Optional font for the icon
+    ///   - color: Optional color for the icon
+    public init(icon: String, font: Font? = nil, color: Color = .primary) {
+        self.imageSourceType = .icon
+        self.icon = icon
+        self.iconFont = font
+        self.iconColor = color
+    }
+
+    /// Initializes a new instance of `AEPImage` from a dictionary of data
     /// Failable initializer, returns nil if the required fields are not present in the data
     /// - Parameter data: The dictionary containing server side styling and content of the Image
     init?(_ data: [String: Any]) {

@@ -50,6 +50,21 @@ struct ContainerSettingsView: View {
                             }
                             .pickerStyle(SegmentedPickerStyle())
                             
+                            HStack {
+                                Text("Card Spacing")
+                                Spacer()
+                                TextField("Spacing", value: Binding(
+                                    get: { Double(settings.spacing) },
+                                    set: { newSpacing in
+                                        settings.spacing = CGFloat(newSpacing)
+                                        onSettingsChanged(settings)
+                                    }
+                                ), format: .number)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .frame(width: 80)
+                                .keyboardType(.numberPad)
+                            }
+                            
                             ColorPicker("Container Background", selection: Binding(
                                 get: { settings.backgroundColor },
                                 set: { color in
@@ -59,9 +74,10 @@ struct ContainerSettingsView: View {
                             ))
                         }
                         
-                        // Header Settings
-                        SettingsSection(title: "Header") {
-                            Toggle("Show Header", isOn: Binding(
+                        // Header Settings - Toggle in Section header
+                        ToggleableSettingsSection(
+                            title: "Header",
+                            isEnabled: Binding(
                                 get: { settings.header?.isVisible ?? false },
                                 set: { showHeader in
                                     if showHeader {
@@ -79,15 +95,10 @@ struct ContainerSettingsView: View {
                                     }
                                     onSettingsChanged(settings)
                                 }
-                            ))
-                            
+                            )
+                        ) {
                             if settings.header?.isVisible ?? false {
                                 VStack(alignment: .leading, spacing: 12) {
-                                    Text("Header Style")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                        .padding(.top, 8)
-                                    
                                     TextField("Header Title", text: Binding(
                                         get: { settings.header?.title.content ?? "" },
                                         set: { newTitle in
@@ -140,37 +151,157 @@ struct ContainerSettingsView: View {
                                         }
                                     ))
                                 }
-                                .padding(.leading, 8)
                             }
                         }
                         
-                        // Pull to Refresh Settings
-                        SettingsSection(title: "Pull to Refresh") {
-                            Toggle("Enable Pull to Refresh", isOn: Binding(
+                        // Pull to Refresh Settings - Toggle in section header
+                        ToggleableSettingsSection(
+                            title: "Pull to Refresh",
+                            isEnabled: Binding(
                                 get: { settings.pullToRefresh.isEnabled },
                                 set: { isEnabled in
                                     settings.pullToRefresh.isEnabled = isEnabled
                                     onSettingsChanged(settings)
                                 }
-                            ))
+                            )
+                        ) {
+                            if settings.pullToRefresh.isEnabled {
+                                ColorPicker("Refresh Indicator Color", selection: Binding(
+                                    get: { settings.pullToRefresh.tintColor },
+                                    set: { color in
+                                        settings.pullToRefresh.tintColor = color
+                                        onSettingsChanged(settings)
+                                    }
+                                ))
+                            }
                         }
                         
-                        // Unread State Settings
-                        SettingsSection(title: "Unread State") {
-                            Toggle("Enable Unread Indicator", isOn: Binding(
+                        // Unread State Settings - Toggle in section header
+                        ToggleableSettingsSection(
+                            title: "Unread State",
+                            isEnabled: Binding(
                                 get: { settings.unreadState.isEnabled },
                                 set: { isEnabled in
                                     settings.unreadState.isEnabled = isEnabled
                                     onSettingsChanged(settings)
                                 }
-                            ))
-                            
+                            )
+                        ) {
                             if settings.unreadState.isEnabled {
-                                VStack(alignment: .leading, spacing: 12) {
-                                    Text("Indicator Style")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                        .padding(.top, 8)
+                                // Background Indicator
+                                ToggleableSettingsSection(
+                                    title: "Background Indicator",
+                                    isEnabled: Binding(
+                                        get: { settings.unreadState.backgroundColor != nil },
+                                        set: { isEnabled in
+                                            if isEnabled {
+                                                settings.unreadState.backgroundColor = .red
+                                            } else {
+                                                settings.unreadState.backgroundColor = nil
+                                            }
+                                            onSettingsChanged(settings)
+                                        }
+                                    )
+                                ) {
+                                    ColorPicker("Background Color", selection: Binding(
+                                        get: { settings.unreadState.backgroundColor ?? .red },
+                                        set: { color in
+                                            settings.unreadState.backgroundColor = color
+                                            onSettingsChanged(settings)
+                                        }
+                                    ))
+                                }
+                                
+                                // Bar Indicator
+                                ToggleableSettingsSection(
+                                    title: "Bar Indicator",
+                                    isEnabled: Binding(
+                                        get: { settings.unreadState.barThickness != nil },
+                                        set: { isEnabled in
+                                            if isEnabled {
+                                                settings.unreadState.barColor = .blue
+                                                settings.unreadState.barThickness = 4
+                                            } else {
+                                                settings.unreadState.barColor = .blue
+                                                settings.unreadState.barThickness = nil
+                                            }
+                                            onSettingsChanged(settings)
+                                        }
+                                    )
+                                ) {
+                                    ColorPicker("Bar Color", selection: Binding(
+                                        get: { settings.unreadState.barColor ?? .blue },
+                                        set: { color in
+                                            settings.unreadState.barColor = color
+                                            onSettingsChanged(settings)
+                                        }
+                                    ))
+                                    
+                                    HStack {
+                                        Text("Bar Thickness")
+                                        Spacer()
+                                        TextField("Thickness", value: Binding(
+                                            get: { Double(settings.unreadState.barThickness ?? 4) },
+                                            set: { thickness in
+                                                settings.unreadState.barThickness = CGFloat(thickness)
+                                                onSettingsChanged(settings)
+                                            }
+                                        ), format: .number)
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                                        .frame(width: 80)
+                                        .keyboardType(.numberPad)
+                                    }
+                                    
+                                    Picker("Bar Position", selection: Binding(
+                                        get: { IconPosition(from: settings.unreadState.barPosition) },
+                                        set: { position in
+                                            settings.unreadState.barPosition = position.alignment
+                                            onSettingsChanged(settings)
+                                        }
+                                    )) {
+                                        Text("Leading").tag(IconPosition.leading)
+                                        Text("Trailing").tag(IconPosition.trailing)
+                                        Text("Top").tag(IconPosition.top)
+                                        Text("Bottom").tag(IconPosition.bottom)
+                                    }
+                                    .pickerStyle(.menu)
+                                }
+                                
+                                // Icon Indicator
+                                ToggleableSettingsSection(
+                                    title: "Icon Indicator",
+                                    isEnabled: Binding(
+                                        get: { settings.unreadState.icon != nil },
+                                        set: { isEnabled in
+                                            if isEnabled {
+                                                settings.unreadState.icon = AEPImage(icon: "circle.fill", color: .red)
+                                            } else {
+                                                settings.unreadState.icon = nil
+                                            }
+                                            onSettingsChanged(settings)
+                                        }
+                                    )
+                                ) {
+                                    TextField("Icon Name (SF Symbol)", text: Binding(
+                                        get: { settings.unreadState.icon?.icon ?? "circle.fill" },
+                                        set: { iconName in
+                                            if settings.unreadState.icon == nil {
+                                                settings.unreadState.icon = AEPImage(icon: iconName, color: .red)
+                                            } else {
+                                                settings.unreadState.icon?.icon = iconName
+                                            }
+                                            onSettingsChanged(settings)
+                                        }
+                                    ))
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    
+                                    ColorPicker("Icon Color", selection: Binding(
+                                        get: { settings.unreadState.icon?.iconColor ?? .red },
+                                        set: { color in
+                                            settings.unreadState.icon?.iconColor = color
+                                            onSettingsChanged(settings)
+                                        }
+                                    ))
                                     
                                     Picker("Icon Position", selection: Binding(
                                         get: { IconPosition(from: settings.unreadState.iconPosition) },
@@ -190,17 +321,35 @@ struct ContainerSettingsView: View {
                                         Text("Center").tag(IconPosition.center)
                                     }
                                     .pickerStyle(.menu)
-                                    
-                                    ColorPicker("Indicator Color", selection: Binding(
-                                        get: { settings.unreadState.backgroundColor },
-                                        set: { color in
-                                            settings.unreadState.backgroundColor = color
-                                            onSettingsChanged(settings)
-                                        }
-                                    ))
                                 }
-                                .padding(.leading, 8)
                             }
+                        }
+                        
+                        // Empty State Settings
+                        ToggleableSettingsSection(
+                            title: "Empty State",
+                            isEnabled: Binding(
+                                get: { true }, // Always enabled, but we'll use it for UI consistency
+                                set: { _ in }
+                            ),
+                            showToggle: false
+                        ) {
+                            TextField("Empty State Message", text: Binding(
+                                get: { settings.emptyState.message.content },
+                                set: { newMessage in
+                                    settings.emptyState.message.content = newMessage
+                                    onSettingsChanged(settings)
+                                }
+                            ))
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            
+                            ColorPicker("Message Color", selection: Binding(
+                                get: { settings.emptyState.message.textColor ?? .primary },
+                                set: { color in
+                                    settings.emptyState.message.textColor = color
+                                    onSettingsChanged(settings)
+                                }
+                            ))
                         }
                     }
                     .padding()
@@ -242,8 +391,53 @@ struct SettingsSection<Content: View>: View {
                 .font(.subheadline)
                 .foregroundColor(.secondary)
             
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 12) {
                 content
+            }
+            .padding(.top, 4)
+        }
+        .padding()
+        .background(Color(.systemGray6))
+        .cornerRadius(12)
+    }
+}
+
+// Toggleable Settings Section View
+struct ToggleableSettingsSection<Content: View>: View {
+    let title: String
+    @Binding var isEnabled: Bool
+    let content: Content
+    let showToggle: Bool
+    
+    init(title: String, isEnabled: Binding<Bool>, showToggle: Bool = true, @ViewBuilder content: () -> Content) {
+        self.title = title
+        self._isEnabled = isEnabled
+        self.content = content()
+        self.showToggle = showToggle
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            // Header with Toggle
+            HStack {
+                Text(title)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                
+                Spacer()
+                
+                if showToggle {
+                    Toggle("", isOn: $isEnabled)
+                        .labelsHidden()
+                }
+            }
+            
+            // Content
+            if !showToggle || isEnabled {
+                VStack(alignment: .leading, spacing: 12) {
+                    content
+                }
+                .padding(.top, 4)
             }
         }
         .padding()
@@ -310,5 +504,23 @@ enum IconPosition: Hashable {
         case .center: self = .center
         default: self = .topLeading
         }
+    }
+}
+
+// Add this enum at the bottom of the file
+enum UnreadIndicatorType {
+    case background
+    case bar
+    case icon
+    
+    static func current(for state: UnreadState) -> UnreadIndicatorType {
+        if state.backgroundColor != nil {
+            return .background
+        } else if state.barThickness != nil {
+            return .bar
+        } else if state.icon != nil {
+            return .icon
+        }
+        return .background // Default
     }
 }

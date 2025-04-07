@@ -16,26 +16,14 @@ import SwiftUI
 struct CardsView: View, ContentCardUIEventListening {
     
     let cardsSurface = Surface(path: Constants.SurfaceName.CONTENT_CARD)
-    @State var container : ContainerUI?
-    @State private var viewLoaded: Bool = false
-    @State private var showLoadingIndicator: Bool = false
+    @State var container: ContainerUI?
     @State private var isSettingsVisible: Bool = false
     @State private var containerSettings: ContainerSetting = ContainerSetting()
     
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack {
-                // TabHeader(title: "Content Cards", refreshAction: {
-                //     refreshCards()
-                // }, redownloadAction: {
-                //     downloadCards()
-                //     refreshCards()
-                // })
-                
-                if let containerView = container?.view {
-                    containerView
-                        .border(Color.red, width: 2)
-                }                
+                container?.view
                 Spacer()
             }
             
@@ -62,7 +50,7 @@ struct CardsView: View, ContentCardUIEventListening {
                 isSettingsVisible: $isSettingsVisible,
                 onSettingsChanged: { newSettings in
                     containerSettings = newSettings
-                    refreshCards()
+                    container?.refreshSettings(newSettings)
                 }
             )
             .padding(.horizontal)
@@ -70,26 +58,12 @@ struct CardsView: View, ContentCardUIEventListening {
             .animation(.spring(), value: isSettingsVisible)
         }
         .onAppear() {
-            if !viewLoaded {
-                viewLoaded = true
-                refreshCards()
-            }
+            // Create the container with initial settings
+            container = Messaging.getContentCardsContainerUI(for: cardsSurface,
+                                                          customizer: CardCustomizer(),
+                                                          listener: self,
+                                                          settings: containerSettings)
         }
-    }
-    
-    func refreshCards() {
-        showLoadingIndicator = true
-        Messaging.getContentCardsContainerUI(for: cardsSurface,
-                                     customizer: CardCustomizer(),
-                                     listener: self,
-                                     settings: containerSettings) { container in
-            self.container = container
-        }
-    }
-    
-    func downloadCards() {
-        showLoadingIndicator = true
-        Messaging.updatePropositionsForSurfaces([cardsSurface])
     }
     
     func onDisplay(_ card: ContentCardUI) {
