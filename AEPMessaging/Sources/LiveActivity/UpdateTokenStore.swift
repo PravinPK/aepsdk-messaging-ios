@@ -11,6 +11,7 @@
  */
 
 import AEPServices
+import Foundation
 
 final class UpdateTokenStore: TokenStoreBase<LiveActivity.UpdateTokenMap> {
     init() {
