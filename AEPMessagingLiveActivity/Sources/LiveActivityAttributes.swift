@@ -22,3 +22,11 @@ public protocol LiveActivityAttributes: ActivityAttributes {
     /// The Adobe Experience Platform data associated with the Live Activity.
     var liveActivityData: LiveActivityData { get }
 }
+
+#if DEBUG
+public protocol DebugInitialisable {
+    init()
+}
+@available(iOS 16.1, *)
+public typealias DebuggableLiveActivityAttributes = LiveActivityAttributes & DebugInitialisable
+#endif

@@ -42,6 +42,9 @@ public extension Messaging {
     ///                   This type defines the structure and content of your Live Activity.
     static func registerLiveActivity<T: LiveActivityAttributes>(_: T.Type) {
         let attributeType = T.attributeType
+        
+        // Dispatch attribute structure event
+        dispatchAttributeStructureEvent(type: T.self)
 
         if #available(iOS 17.2, *) {
             let newPushTask = createPushToStartTokenTask(type: T.self)
@@ -294,5 +297,208 @@ public extension Messaging {
                           source: EventSource.requestContent,
                           data: data)
         MobileCore.dispatch(event: event)
+    }
+
+    // MARK: - Private Helper Functions for Attribute Structure
+    
+    /// Helper to extract the generic type from an Optional
+    private static func extractGenericType(from typeName: String) -> String? {
+        // Check if the type is an Optional
+        if typeName.hasPrefix("Optional<") && typeName.hasSuffix(">") {
+            // Extract the generic type
+            let startIndex = typeName.index(typeName.startIndex, offsetBy: "Optional<".count)
+            let endIndex = typeName.index(typeName.endIndex, offsetBy: -1)
+            return String(typeName[startIndex..<endIndex])
+        }
+        return nil
+    }
+    
+    /// Helper function to recursively explore object properties
+    private static func exploreObject(_ value: Any) -> Any {
+        let mirror = Mirror(reflecting: value)
+        let typeName = String(describing: Swift.type(of: value))
+        
+        // Handle Optional values
+        if mirror.displayStyle == .optional {
+            // Check if we can extract the generic type from the typeName
+            // Format is typically "Optional<Type>" but when nil it might not show in children
+            if let genericType = extractGenericType(from: typeName) {
+                return "Optional<\(genericType)>"
+            }
+            
+            // If couldn't extract from type name, look at the value
+            if let firstChild = mirror.children.first {
+                return "Optional<\(String(describing: Swift.type(of: firstChild.value)))>"
+            } else {
+                // If it's nil, we need to infer the type from the typeName
+                return typeName 
+            }
+        }
+        
+        // If this has no children or is an enum, return its type name
+        if mirror.children.isEmpty || mirror.displayStyle == .enum {
+            return typeName
+        }
+        
+        // Otherwise, explore its structure
+        var result: [String: Any] = [:]
+        for child in mirror.children {
+            if let label = child.label, !label.hasPrefix("_") {
+                let childValue = child.value
+                let childMirror = Mirror(reflecting: childValue)
+                let childTypeName = String(describing: Swift.type(of: childValue))
+                
+                // Handle different cases
+                if childMirror.displayStyle == .optional {
+                    // Process optionals directly
+                    if let genericType = extractGenericType(from: childTypeName) {
+                        result[label] = "Optional<\(genericType)>"
+                    } else if let firstChild = childMirror.children.first {
+                        result[label] = "Optional<\(String(describing: Swift.type(of: firstChild.value)))>"
+                    } else {
+                        result[label] = childTypeName
+                    }
+                } else if childMirror.children.isEmpty || childMirror.displayStyle == .enum || childTypeName.hasPrefix("Swift.") {
+                    // For Swift standard types, empty objects, or enums, just store the type name
+                    result[label] = childTypeName
+                } else {
+                    // For custom types with properties, recursively explore
+                    result[label] = exploreObject(childValue)
+                }
+            }
+        }
+        
+        return result
+    }
+
+
+    // MARK: - Event Dispatch Methods
+    
+    /// Dispatches an event containing the structure of the LiveActivity attribute.
+    ///
+    /// This method constructs and dispatches an event that represents the structure
+    /// of the LiveActivity attribute type, including its properties and their types.
+    ///
+    /// - Parameter type: The concrete type conforming to ``LiveActivityAttributes`` whose structure will be dispatched.
+    private static func dispatchAttributeStructureEvent<T: LiveActivityAttributes>(type: T.Type) {
+        let attributeType = T.attributeType
+        
+        // Build the attribute structure dictionary
+        var attributeStructure: [String: Any] = [:]
+        
+        #if DEBUG
+        // Only types that opt in to DebugInitialisable will be reflected
+        if let debuggable = T.self as? any DebuggableLiveActivityAttributes.Type {
+            let instance = debuggable.init()
+            attributeStructure["attributes"] = exploreObject(instance)
+            
+            // Extract ContentState properties
+            let contentStateProperties = getContentStateProperties(for: T.self)
+            if !contentStateProperties.isEmpty {
+                attributeStructure["content-state"] = contentStateProperties
+            }
+        }
+        #endif
+        
+        // Add the attribute type - ensure this is always included
+        attributeStructure["attributes-type"] = attributeType
+        
+        Log.debug(label: MessagingConstants.LOG_TAG,
+                  """
+                  Dispatching Live Activity attribute structure event.
+                  Type: \(attributeType)
+                  Structure: \(attributeStructure)
+                  """)
+        
+        let eventName = "Live Activity Structure Event for (\(attributeType))"
+        let event = Event(name: eventName,
+                         type: EventType.messaging,
+                         source: EventSource.requestContent,
+                         data: [
+                             "isAttributeStructureEvent": true,
+                             MessagingConstants.Event.Data.Key.ATTRIBUTE_TYPE: attributeType,
+                             "attributeStructure": attributeStructure
+                         ])
+        MobileCore.dispatch(event: event)
+    }
+    
+    /// Gets the property structure of a ContentState type
+    ///
+    /// - Parameter type: The LiveActivityAttributes type containing the ContentState
+    /// - Returns: Dictionary mapping property names to their type names
+    private static func getContentStateProperties<T: LiveActivityAttributes>(for type: T.Type) -> [String: String] {
+        let contentStateType = T.ContentState.self
+        let contentStateTypeName = String(describing: contentStateType)
+        Log.debug(label: MessagingConstants.LOG_TAG, "Getting properties for ContentState type: \(contentStateTypeName)")
+        
+        var properties: [String: String] = [:]
+        
+        // Try to get metadata from the ContentState if it conforms to _ExposesMetadata
+        if let metadataProvider = contentStateType as? _ExposesMetadata.Type {
+            Log.debug(label: MessagingConstants.LOG_TAG, "ContentState exposes metadata via macro")
+            for (name, type) in metadataProvider.__metadata.properties {
+                properties[name] = String(describing: type)
+            }
+            return properties
+        }
+        
+        #if DEBUG
+        // If no metadata is available, use our fallback approach
+        if properties.isEmpty {
+            Log.debug(label: MessagingConstants.LOG_TAG, "No macro metadata found, falling back to reflection")
+            
+            // Method 1: Use JSON parsing errors to discover required properties
+            let emptyJson = "{}"
+            if let data = emptyJson.data(using: .utf8) {
+                do {
+                    _ = try JSONDecoder().decode(T.ContentState.self, from: data)
+                } catch let decodingError as DecodingError {
+                    switch decodingError {
+                    case .keyNotFound(let key, _):
+                        // Found a required property
+                        properties[key.stringValue] = "Unknown" // We don't know the type yet
+                    default:
+                        break
+                    }
+                } catch {
+                    // Unknown error, fallback to other methods
+                }
+            }
+            
+            // Try to determine property types if we found any
+            if !properties.isEmpty {
+                for propertyName in properties.keys {
+                    // Try with common types
+                    for (value, typeName) in [("", "String"), (0, "Int"), (0.0, "Double"), (false, "Bool")] {
+                        let jsonObj = [propertyName: value]
+                        if let jsonData = try? JSONSerialization.data(withJSONObject: jsonObj) {
+                            do {
+                                _ = try JSONDecoder().decode(T.ContentState.self, from: jsonData)
+                                // If we get here, we found the correct type
+                                properties[propertyName] = typeName
+                                break
+                            } catch {
+                                // Continue trying other types
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        #endif
+        
+        return properties
+    }
+    
+    /// Protocol for types that expose metadata about their properties
+    private protocol _ExposesMetadata {
+        /// Get metadata about the type's properties
+        static var __metadata: PropertyMetadata { get }
+    }
+    
+    /// Represents metadata about a type's properties
+    private struct PropertyMetadata {
+        /// Array of tuples containing property name and type
+        var properties: [(name: String, type: Any.Type)]
     }
 }

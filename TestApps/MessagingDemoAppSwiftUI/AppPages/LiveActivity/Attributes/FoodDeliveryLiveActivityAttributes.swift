@@ -14,6 +14,7 @@ import ActivityKit
 import AEPMessagingLiveActivity
 
 @available(iOS 16.1, *)
+@AttributeMetadataMacro
 struct FoodDeliveryLiveActivityAttributes: LiveActivityAttributes {
 
     // Static Attributes
@@ -26,3 +27,14 @@ struct FoodDeliveryLiveActivityAttributes: LiveActivityAttributes {
         var orderStatus: String
     }
 }
+
+#if DEBUG
+@available(iOS 16.1, *)
+extension FoodDeliveryLiveActivityAttributes: DebugInitialisable {
+    init() {
+        self.liveActivityData = LiveActivityData(liveActivityID: "debug_id")
+        self.restaurantName = "Rest"
+    }
+}
+#endif
+

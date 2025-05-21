@@ -11,6 +11,8 @@ governing permissions and limitations under the License.
 */
 
 import SwiftUI
+// Import the files we need for the macro demo
+@_implementationOnly import AEPMessagingLiveActivity
 
 // MARK: - LiveActivityView
 
@@ -66,6 +68,14 @@ struct LiveActivityView: View {
                     CardView(
                         imageName: "AirplaneLogo",
                         title: "Airplane Tracking \n Live Activity"
+                    )
+                }
+                
+                // Card 4: Macro Demo
+                NavigationLink(destination: MacroTestView()) {
+                    CardView(
+                        imageName: "hammer.fill",
+                        title: "Macro Property \n Detection Demo"
                     )
                 }
             }

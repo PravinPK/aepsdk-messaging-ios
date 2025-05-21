@@ -30,3 +30,22 @@ struct AirplaneTrackingAttributes: LiveActivityAttributes {
         let journeyProgress: Int
     }
 }
+
+#if DEBUG
+@available(iOS 16.1, *)
+extension AirplaneTrackingAttributes: DebugInitialisable {
+    
+    init() {
+        self.liveActivityData = LiveActivityData(liveActivityID: "debug_id")
+        self.arrivalAirport = "SFO"
+        self.departureAirport = "JFK"
+        self.arrivalTerminal = "Terminal D"
+        self.ContentState = .init(journeyProgress: 0)
+        
+    }
+}
+#endif
+
+
+struct custom : ActivityAttributes {
+}

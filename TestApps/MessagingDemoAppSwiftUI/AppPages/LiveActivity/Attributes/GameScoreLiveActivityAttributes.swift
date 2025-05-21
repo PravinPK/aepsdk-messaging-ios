@@ -26,3 +26,13 @@ struct GameScoreLiveActivityAttributes: LiveActivityAttributes {
         var statusText: String
     }
 }
+
+#if DEBUG
+@available(iOS 16.1, *)
+extension GameScoreLiveActivityAttributes : DebugInitialisable {
+    init() {
+        self.liveActivityData = LiveActivityData(liveActivityID: "debug_id")
+    }
+}
+#endif
+
