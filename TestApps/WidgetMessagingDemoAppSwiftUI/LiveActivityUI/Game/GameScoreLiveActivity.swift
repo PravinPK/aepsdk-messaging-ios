@@ -246,12 +246,12 @@ extension GameScoreLiveActivityAttributes.ContentState {
 
 // MARK: - Preview
 
-#Preview("Notification", as: .content,
-         using: GameScoreLiveActivityAttributes(liveActivityData: LiveActivityData(liveActivityID: "<UNIQUE_GAME_ID>"))
-) {
-    GameScoreLiveActivity()
-} contentStates: {
-    GameScoreLiveActivityAttributes.ContentState.startOfGame
-    GameScoreLiveActivityAttributes.ContentState.midGame
-    GameScoreLiveActivityAttributes.ContentState.finalScore
-}
+//#Preview("Notification", as: .content,
+//         using: GameScoreLiveActivityAttributes(liveActivityData: LiveActivityData(liveActivityID: "<UNIQUE_GAME_ID>"))
+//) {
+//    GameScoreLiveActivity()
+//} contentStates: {
+//    GameScoreLiveActivityAttributes.ContentState.startOfGame
+//    GameScoreLiveActivityAttributes.ContentState.midGame
+//    GameScoreLiveActivityAttributes.ContentState.finalScore
+//}

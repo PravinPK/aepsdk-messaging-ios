@@ -126,7 +126,7 @@ private extension GameScoreLiveActivityView {
     /// Row for each running activity
     func activityRow(activity: Activity<GameScoreLiveActivityAttributes>, index: Int) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            
+                        
             // Top row (title, ID, push token)
             HStack(alignment: .top) {
                 // Left side: Activity number and ID
@@ -278,7 +278,21 @@ private extension GameScoreLiveActivityView {
             return
         }
         
-        let attributes = GameScoreLiveActivityAttributes(liveActivityData: LiveActivityData(liveActivityID: "<Unique_Game_ID>"))
+        let attributes = GameScoreLiveActivityAttributes(
+            liveActivityData: LiveActivityData(liveActivityID: "<Unique_Game_ID>"),
+            mOptString: "optionalStartString",
+            mString: "startString",
+            mInt: 456,
+            mDouble: 789.012,
+            mBool: false,
+            mArray: ["startVal1", "startVal2"],
+            mObject: [Venue(name: "Start Stadium", asdf: "startAsdfValue")],
+            normalDict: ["startKey": "startVal"],
+            normalArray: ["initialElement"],
+            complexDict: ["startComplexKey": Venue(name: "Start Complex Stadium", asdf: "startComplexAsdf")],
+            complexArray: [Venue(name: "Start Complex Array Venue", asdf: "startArrayAsdf")],
+            superComplexArray: [["startOuterKey": ["startInnerKey": Venue(name: "Start Super Complex Venue", asdf: "startSuperAsdf")] ]]
+        )
         let initialContentState = GameScoreLiveActivityAttributes.ContentState(
             homeTeamScore: 0,
             awayTeamScore: 0,

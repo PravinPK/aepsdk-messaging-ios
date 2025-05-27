@@ -30,3 +30,16 @@ struct AirplaneTrackingAttributes: LiveActivityAttributes {
         let journeyProgress: Int
     }
 }
+
+@available(iOS 16.1, *)
+extension AirplaneTrackingAttributes : LiveActivityAssuranceDebuggable {
+    static func getDebugInfo() -> (attributes: AirplaneTrackingAttributes, state: ContentState) {
+        return (AirplaneTrackingAttributes(
+            liveActivityData: LiveActivityData(channelID: "channelID"),
+            arrivalAirport: "SFO",
+            departureAirport: "MIA",
+            arrivalTerminal: "Terminal 3"),
+        ContentState(journeyProgress: 0))
+
+    }
+}

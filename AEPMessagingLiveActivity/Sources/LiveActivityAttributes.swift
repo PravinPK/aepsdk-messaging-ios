@@ -22,3 +22,18 @@ public protocol LiveActivityAttributes: ActivityAttributes {
     /// The Adobe Experience Platform data associated with the Live Activity.
     var liveActivityData: LiveActivityData { get }
 }
+
+//@available(iOS 16.1, *)
+//public protocol LiveActivityAssuranceDebuggable {
+//    associatedtype ActivityAttributes: LiveActivityAttributes
+//    func getAttributes() -> ActivityAttributes
+//    func getContentState() -> ActivityAttributes.ContentState
+//}
+
+@available(iOS 16.1, *)
+public protocol LiveActivityAssuranceDebuggable : LiveActivityAttributes {
+    // 'Self' refers to the conforming type, which is already a LiveActivityAttributes
+    // 'Self.ContentState' is available via LiveActivityAttributes -> ActivityAttributes -> ContentState
+    static func getDebugInfo() -> (attributes: Self, state: Self.ContentState)
+}
+

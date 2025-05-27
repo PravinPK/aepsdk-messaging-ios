@@ -22,7 +22,16 @@ struct FoodDeliveryLiveActivityAttributes: LiveActivityAttributes {
     
     // Dynamic Attributes
     struct ContentState: Codable, Hashable {
-        /// Possible values: "Ordered", "Order Accepted", "Preparing", "On the Way", "Delivered"
         var orderStatus: String
+    }
+}
+
+@available(iOS 16.1, *)
+extension FoodDeliveryLiveActivityAttributes : LiveActivityAssuranceDebuggable {
+    static func getDebugInfo() -> (attributes: FoodDeliveryLiveActivityAttributes, state: ContentState) {
+        (FoodDeliveryLiveActivityAttributes(
+            liveActivityData: LiveActivityData(liveActivityID: "order52d224dafd5g"),
+            restaurantName: "Chuck E. Cheese"),
+         .init(orderStatus: "Ordered"))
     }
 }

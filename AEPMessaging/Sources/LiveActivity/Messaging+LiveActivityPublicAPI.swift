@@ -43,6 +43,10 @@ public extension Messaging {
     static func registerLiveActivity<T: LiveActivityAttributes>(_: T.Type) {
         let attributeType = T.attributeType
 
+        if let debuggableType = T.self as? any LiveActivityAssuranceDebuggable.Type {
+            dispatchAttributeStructureEvent(type: debuggableType)
+        }
+
         if #available(iOS 17.2, *) {
             let newPushTask = createPushToStartTokenTask(type: T.self)
             Task {
@@ -295,4 +299,252 @@ public extension Messaging {
                           data: data)
         MobileCore.dispatch(event: event)
     }
+
+    
+    private static func dispatchAttributeStructureEvent<T : LiveActivityAssuranceDebuggable>(
+        type: T.Type) {
+        let debugInfo = T.getDebugInfo()
+        let attributes = debugInfo.attributes
+        let contentState = debugInfo.state
+
+        let attributeTypeName = String(describing: T.self)
+        let eventData: [String: Any] = [
+            "attributes-type": attributeTypeName,
+            "attributes": buildJSONSchemaObject(of: attributes),
+            "content-state": buildJSONSchemaObject(of: contentState)
+        ]
+        
+        // TODO: Define this event name in MessagingConstants
+        let eventName = "Live Activity Assurance Debug for type (\(attributeTypeName))"
+        let event = Event(name: eventName,
+                          type: EventType.messaging,
+                          source: EventSource.requestContent,
+                          data: eventData)
+        MobileCore.dispatch(event: event)
+    }
+
+    private static func exploreType(of value: Any) -> Any {
+        let mirror = Mirror(reflecting: value)
+        let typeName = String(describing: Swift.type(of: value))
+
+        // Helper to wrap a raw type name in custom placeholder syntax
+        func placeholder(for raw: String) -> String {
+            if raw.hasPrefix("Optional<"), raw.hasSuffix(">") {
+                let inner = raw.dropFirst("Optional<".count).dropLast()
+                return "<~\(inner)?~>"
+            }
+            return "<~\(raw)~>"
+        }
+
+        // 1) Optional handling
+        if mirror.displayStyle == .optional {
+            if let child = mirror.children.first {
+                let unwrapped = exploreType(of: child.value)
+                if let str = unwrapped as? String {
+                    let core: String
+                    if str.hasPrefix("<~") && str.hasSuffix("~>") {
+                        core = String(str.dropFirst(2).dropLast(2))
+                    } else {
+                        core = str
+                    }
+                    return "<~\(core)?~>"
+                }
+                return unwrapped
+            }
+            return placeholder(for: typeName)
+        }
+
+        // 2) Array handling
+        if let array = value as? [Any] {
+            guard let first = array.first else {
+                return placeholder(for: typeName)
+            }
+            let elementDesc = exploreType(of: first)
+            if let map = elementDesc as? [String: Any]     { return [ map ] }
+            if let str = elementDesc as? String           { return [ str ] }
+            return [ "\(elementDesc)" ]
+        }
+
+        // 3) Dictionary handling
+        if let dict = value as? [AnyHashable: Any] {
+            guard let (_, firstVal) = dict.first else {
+                return placeholder(for: typeName)
+            }
+            // extract the declared Key type name
+            let rawKeyType: String = {
+                guard typeName.hasPrefix("Dictionary<"),
+                      let lt = typeName.firstIndex(of: "<"),
+                      let gt = typeName.lastIndex(of: ">")
+                else { return "AnyHashable" }
+                let inside = typeName[typeName.index(after: lt)..<gt]
+                return inside
+                    .split(separator: ",", maxSplits: 1)
+                    .map({ $0.trimmingCharacters(in: .whitespaces) })
+                    .first ?? "AnyHashable"
+            }()
+            let keyPlaceholder = placeholder(for: rawKeyType)
+            let valDesc = exploreType(of: firstVal)
+            if let map = valDesc as? [String: Any] {
+                return [ keyPlaceholder: map ]
+            }
+            if let str = valDesc as? String {
+                return [ keyPlaceholder: str ]
+            }
+            return [ keyPlaceholder: "\(valDesc)" ]
+        }
+
+        // 4) Leaf / standard types
+        if mirror.children.isEmpty
+           || mirror.displayStyle == .enum
+           || typeName.hasPrefix("Swift.") {
+            return placeholder(for: typeName)
+        }
+
+        // 5) Structs / classes
+        var result = [String: Any]()
+        for child in mirror.children {
+            guard let label = child.label,
+                  !label.hasPrefix("_")
+            else { continue }
+            result[label] = exploreType(of: child.value)
+        }
+        return result
+    }
+    
+    /// Reflects a Swift value’s type into a JSON-Schema snippet.
+    private static func buildJSONSchemaObject(of value: Any) -> [String: Any] {
+        let mirror = Mirror(reflecting: value)
+        let rawType = String(describing: Swift.type(of: value))
+        
+        // 1) Optional<T> → allow null
+        if mirror.displayStyle == .optional {
+            // if there's a wrapped value, recurse
+            if let child = mirror.children.first {
+                var schema = buildJSONSchemaObject(of: child.value)
+                // merge null into the type entry
+                if let t = schema["type"] {
+                    if var types = t as? [String] {
+                        types.append("null")
+                        schema["type"] = types
+                    } else if let single = t as? String {
+                        schema["type"] = [ single, "null" ]
+                    }
+                } else {
+                    schema["type"] = ["null"]
+                }
+                return schema
+            }
+            // no wrapped value → just a nullable anything
+            return ["type": ["null"]]
+        }
+        
+        // 2) Array → JSON-Schema array
+        if let arr = value as? [Any] {
+            let itemsSchema: [String: Any]
+            if let first = arr.first {
+                itemsSchema = buildJSONSchemaObject(of: first)
+            } else {
+                // fallback to any-type array
+                itemsSchema = ["type": "object"]
+            }
+            return [
+                "type": "array",
+                "items": itemsSchema
+            ]
+        }
+
+        // 3) Dictionary → JSON-Schema object with open values
+        if let dict = value as? [AnyHashable: Any] {
+            let valueSchema: [String: Any]
+            if let (_, firstVal) = dict.first {
+                valueSchema = buildJSONSchemaObject(of: firstVal)
+            } else {
+                valueSchema = ["type": "object"]
+            }
+            return [
+                "type": "object",
+                "additionalProperties": valueSchema
+            ]
+        }
+
+        // 4) Leaf types
+        if mirror.children.isEmpty || mirror.displayStyle == .enum || rawType.hasPrefix("Swift.") {
+            switch rawType {
+            case "String":     return ["type": "string"]
+            case "Int", "Int8", "Int16", "Int32", "Int64",
+                 "UInt", "UInt8", "UInt16", "UInt32", "UInt64":
+                              return ["type": "integer"]
+            case "Double", "Float", "Float32", "Float64":
+                              return ["type": "number"]
+            case "Bool":       return ["type": "boolean"]
+            default:           return ["type": "object"]  // fallback
+            }
+        }
+
+        // 5) Structs / classes → JSON-Schema object with properties
+        var properties: [String: Any] = [:]
+        var required: [String] = []
+        for child in mirror.children {
+            guard let key = child.label, !key.hasPrefix("_") else { continue }
+            let childSchema = buildJSONSchemaObject(of: child.value)
+            properties[key] = childSchema
+            
+            // if it isn’t Optional<…>, mark required
+            let childTypeName = String(describing: Swift.type(of: child.value))
+            if !childTypeName.hasPrefix("Optional<") {
+                required.append(key)
+            }
+        }
+        var result: [String: Any] = [
+            "type": "object",
+            "properties": properties
+        ]
+        if !required.isEmpty {
+            result["required"] = required
+        }
+        return result
+    }
+    
+    
+    private static func exploreValue(of value: Any) -> Any {
+        let mirror = Mirror(reflecting: value)
+
+        // 1) Optional: unwrap or emit null
+        if mirror.displayStyle == .optional {
+            if let child = mirror.children.first {
+                return exploreValue(of: child.value)
+            } else {
+                return NSNull()
+            }
+        }
+
+        // 2) Array: map each element
+        if let array = value as? [Any] {
+            return array.map { exploreValue(of: $0) }
+        }
+
+        // 3) Dictionary: map keys→values
+        if let dict = value as? [AnyHashable: Any] {
+            var result: [String: Any] = [:]
+            for (key, val) in dict {
+                result["\(key)"] = exploreValue(of: val)
+            }
+            return result
+        }
+
+        // 4) Leaf types: String, Number, Bool
+        if mirror.children.isEmpty {
+            // JSONSerialization will handle Int, Double, Bool, String, NSNull
+            return value
+        }
+
+        // 5) Structs / classes: build [String:Any]
+        var result: [String: Any] = [:]
+        for child in mirror.children {
+            guard let label = child.label, !label.hasPrefix("_") else { continue }
+            result[label] = exploreValue(of: child.value)
+        }
+        return result
+    }
+
 }
