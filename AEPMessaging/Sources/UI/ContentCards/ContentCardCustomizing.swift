@@ -17,4 +17,5 @@ import Foundation
 public protocol ContentCardCustomizing {
     /// Implement this function to customize content cards with SmallImageTemplate
     func customize(template: SmallImageTemplate)
+    func customize(template: LargeImageTemplate)
 }

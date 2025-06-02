@@ -195,7 +195,7 @@ public class ContainerUI: Identifiable, ObservableObject {
     }
     
     var cardView: some View {
-        ForEach(contentCards) { card in
+        ForEach(Array(contentCards.prefix(settings.capacity))) { card in
             card.view
                 .frame(
                     width: (self.settings.cardWidth ?? .infinity) > 0 ? self.settings.cardWidth : .infinity,

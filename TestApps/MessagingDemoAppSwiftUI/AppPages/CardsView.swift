@@ -110,6 +110,10 @@ class CardCustomizer : ContentCardCustomizing {
         template.dismissButton?.image.iconFont = .system(size: 10)
     }
     
+    func customize(template: LargeImageTemplate) {
+        
+    }
+    
     struct RootHStackModifier : ViewModifier {
         func body(content: Content) -> some View {
             content

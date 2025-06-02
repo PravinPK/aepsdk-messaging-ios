@@ -36,6 +36,30 @@ struct ContainerSettingsView: View {
                     
                     // Settings Controls
                     VStack(spacing: 24) {
+                        // Container Capacity Settings
+                        SettingsSection(title: "Container Capacity") {
+                            HStack {
+                                Text("Number of cards")
+                                Spacer()
+                                TextField("Number of cards", value: Binding(
+                                    get: { Double(settings.capacity) },
+                                    set: { newCapacity in
+                                        settings.capacity = Int(newCapacity)
+                                        onSettingsChanged(settings)
+                                    }
+                                ), format: .number)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .frame(width: 80)
+                                .keyboardType(.numberPad)
+                                .onChange(of: settings.capacity) { newValue in
+                                    if newValue < 1 {
+                                        settings.capacity = 1
+                                        onSettingsChanged(settings)
+                                    }
+                                }
+                            }
+                        }
+                        
                         // Layout Settings
                         SettingsSection(title: "Layout") {
                             Picker("Layout Direction", selection: Binding(

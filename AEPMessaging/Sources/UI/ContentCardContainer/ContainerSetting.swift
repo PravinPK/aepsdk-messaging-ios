@@ -23,6 +23,7 @@ public struct ContainerSetting {
     public var spacing: CGFloat = 20
     
     public var backgroundColor : Color = Color(.systemBackground)
+
     
     public var layout: ContainerLayout = .vertical
     
@@ -39,6 +40,9 @@ public struct ContainerSetting {
     public var cardHeight: CGFloat? = nil
     
     public var cardWidth: CGFloat? = nil
+    
+    /// The maximum number of content cards to display in the container. Default is 30 cards.
+    public var capacity: Int = 30
     
     public init() {}
 }
