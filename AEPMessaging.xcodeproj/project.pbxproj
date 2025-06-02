@@ -22,6 +22,7 @@
 
 /* Begin PBXBuildFile section */
 		01B9DD6617C6AD6E99EE8472 /* Pods_E2EFunctionalTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB180620A608D2821FE98F37 /* Pods_E2EFunctionalTests.framework */; };
+		0725BA812DEE470F0084E52D /* ContainerPPC.json in Resources */ = {isa = PBXBuildFile; fileRef = 0725BA802DEE470F0084E52D /* ContainerPPC.json */; };
 		090290C329D4EA9F00388226 /* MockCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2469A5E8274C107100E56457 /* MockCache.swift */; };
 		090290C529DCED0B00388226 /* ContentCardRulesEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090290C429DCED0B00388226 /* ContentCardRulesEngine.swift */; };
 		090290C929DD11EA00388226 /* RuleConsequence+Messaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090290C829DD11EA00388226 /* RuleConsequence+Messaging.swift */; };
@@ -473,6 +474,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0725BA802DEE470F0084E52D /* ContainerPPC.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ContainerPPC.json; sourceTree = "<group>"; };
 		090290C429DCED0B00388226 /* ContentCardRulesEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentCardRulesEngine.swift; sourceTree = "<group>"; };
 		090290C829DD11EA00388226 /* RuleConsequence+Messaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RuleConsequence+Messaging.swift"; sourceTree = "<group>"; };
 		090290CA29DE3F8200388226 /* MockContentCardRulesEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MockContentCardRulesEngine.swift; path = AEPMessaging/Tests/TestHelpers/MockContentCardRulesEngine.swift; sourceTree = SOURCE_ROOT; };
@@ -897,6 +899,7 @@
 				09305F0B2AC2EAFF00406607 /* MessagingDemoAppSwiftUI-Info.plist */,
 				091881EA2A16BAE400615481 /* Assets.xcassets */,
 				0969D6D02A7AFB3800A00BF7 /* Preview Content */,
+				0725BA802DEE470F0084E52D /* ContainerPPC.json */,
 			);
 			name = MessagingDemoAppSwiftUI;
 			path = TestApps/MessagingDemoAppSwiftUI;
@@ -1884,6 +1887,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0725BA812DEE470F0084E52D /* ContainerPPC.json in Resources */,
 				0969D6D12A7AFB3800A00BF7 /* Preview Content in Resources */,
 				091881EB2A16BAE400615481 /* Assets.xcassets in Resources */,
 			);

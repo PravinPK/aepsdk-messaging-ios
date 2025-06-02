@@ -74,7 +74,15 @@ extension Event {
 
     /// payload is an array of `Proposition` objects, each containing inbound content and related tracking information
     var payload: [Proposition]? {
-        guard let payloadMap = data?[MessagingConstants.Event.Data.Key.Personalization.PAYLOAD] as? [[String: Any]] else {
+        guard let url = Bundle.main.url(forResource: "ContainerPPC", withExtension: "json"),
+              let data = try? Data(contentsOf: url) else {
+            Log.error(label: MessagingConstants.LOG_TAG, "Failed to read ContainerPPC.json")
+            return nil
+        }
+
+        guard let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+              let payloadMap = json["payload"] as? [[String: Any]] else {
+            Log.error(label: MessagingConstants.LOG_TAG, "Failed to parse payload from ContainerPPC.json")
             return nil
         }
 

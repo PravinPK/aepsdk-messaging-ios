@@ -115,7 +115,8 @@ public class ContainerUI: Identifiable, ObservableObject {
         let unreadState = settings.unreadState
         if unreadState.isEnabled {
             for card in contentCards {
-                if ((card.meta?["unread"]) != nil) {
+                let unread = card.meta?["unread"] as? Bool
+                if (unread != nil && unread!) {
                     if let unreadBackground = settings.unreadState.backgroundColor {
                         card.template.backgroundColor = unreadBackground
                     }
@@ -178,7 +179,7 @@ public class ContainerUI: Identifiable, ObservableObject {
         case .downloading:
             AnyView(ProgressView())
         case .empty:
-            AnyView(settings.emptyState.message.view)
+            AnyView(settings.emptyState.image.view)
         case .error(let error):
             AnyView(Text("Error: \(error.localizedDescription)").foregroundColor(.red))
         case .loaded:

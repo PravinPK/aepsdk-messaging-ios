@@ -1,0 +1,451 @@
+{
+    "payload":
+    [
+        {
+            "scope": "mobileapp://com.adobe.MessagingDemoAppSwiftUI/cardstab",
+            "scopeDetails":
+            {
+                "correlationID": "86bf137f-6887-4c7d-9c35-e27dfafe3f41-0",
+                "characteristics":
+                {
+                    "eventToken": "eyJtZXNzYWdlRXhlY3V0aW9uIjp7Im1lc3NhZ2VFeGVjdXRpb25JRCI6IlVFOkluYm91bmQiLCJtZXNzYWdlSUQiOiI0MmQwMzVjMi01NWZiLTQ2MDgtOTFmZi0yYzFmYzZmYTAxMzAiLCJtZXNzYWdlUHVibGljYXRpb25JRCI6Ijg2YmYxMzdmLTY4ODctNGM3ZC05YzM1LWUyN2RmYWZlM2Y0MSIsIm1lc3NhZ2VUeXBlIjoibWFya2V0aW5nIiwiY2FtcGFpZ25JRCI6ImNiZjg3N2YzLTM0MzYtNDBhMy1hMjBjLTBjOGZjZDg0ZjMzYiIsImNhbXBhaWduVmVyc2lvbklEIjoiMGQwOTlmOGItZGM3Ni00NzlhLWI3MjgtNzZkY2I2OGZiOTNiIiwiY2FtcGFpZ25BY3Rpb25JRCI6IjIwMjI2NDI4LTEzYjAtNGU5OC1hOGY3LTA5MTA2YWI3NmM4YSJ9LCJtZXNzYWdlUHJvZmlsZSI6eyJtZXNzYWdlUHJvZmlsZUlEIjoiOWIzNDRkOWQtN2U2Mi00MDkwLWEwZTgtOTM1NDU2OWJmNzA0IiwiY2hhbm5lbCI6eyJfaWQiOiJodHRwczovL25zLmFkb2JlLmNvbS94ZG0vY2hhbm5lbHMvbWVzc2FnZUZlZWQiLCJfdHlwZSI6Imh0dHBzOi8vbnMuYWRvYmUuY29tL3hkbS9jaGFubmVsLXR5cGVzL21lc3NhZ2VGZWVkIn19fQ=="
+                },
+                "decisionProvider": "AJO",
+                "activity":
+                {
+                    "id": "cbf877f3-3436-40a3-a20c-0c8fcd84f33b#20226428-13b0-4e98-a8f7-09106ab7ppc1",
+                    "matchedSurfaces":
+                    [
+                        "mobileapp://com.adobe.MessagingDemoAppSwiftUI/cardstab"
+                    ],
+                    "priority": 0
+                },
+                "rank": 4
+            },
+            "id": "67970ced-801e-402e-83ab-8e15e5edppc1",
+            "items":
+            [
+                {
+                    "schema": "https://ns.adobe.com/personalization/ruleset-item",
+                    "data":
+                    {
+                        "version": 1,
+                        "rules":
+                        [
+                            {
+                                "consequences":
+                                [
+                                    {
+                                        "id": "327f3067-51a6-4700-a875-aafcc910ppc1",
+                                        "detail":
+                                        {
+                                            "id": "327f3067-51a6-4700-a875-aafcc910ppc1",
+                                            "data":
+                                            {
+                                                "content":
+                                                {
+                                                    "buttons":
+                                                    [
+                                                        {
+                                                            "text":
+                                                            {
+                                                                "content": "Tap for more"
+                                                            },
+                                                            "id": "5b4d53f5-45bd-4e5c-a5cb-6e650b19ppc1",
+                                                            "interactId": "downloadClicked",
+                                                            "actionUrl": "https://www.nike.com/"
+                                                        }
+                                                    ],
+                                                    "title":
+                                                    {
+                                                        "content": "Coming Soon: Sabrina 3"
+                                                    },
+                                                    "body":
+                                                    {
+                                                        "content": "Get ready to outwork everyone."
+                                                    },
+                                                    "actionUrl": "",
+                                                    "image":
+                                                    {
+                                                        "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsNFjligORKMNlrctWC5eEHbKYxbDUIGgY2w&s",
+                                                        "alt": ""
+                                                    },
+                                                    "dismissBtn":
+                                                    {
+                                                        "style": "simple"
+                                                    }
+                                                },
+                                                "publishedDate": 1744056934,
+                                                "meta":
+                                                {
+                                                    "surface": "mobileapp://com.adobe.MessagingDemoAppSwiftUI/cardstab",
+                                                    "unread": true,
+                                                    "adobe":
+                                                    {
+                                                        "template": "SmallImage"
+                                                    },
+                                                    "sentDate": "2 hours ago"
+                                                },
+                                                "expiryDate": 2019715200,
+                                                "contentType": "application/json"
+                                            },
+                                            "schema": "https://ns.adobe.com/personalization/message/content-card"
+                                        },
+                                        "type": "schema"
+                                    }
+                                ],
+                                "condition":
+                                {
+                                    "type": "group",
+                                    "definition":
+                                    {
+                                        "logic": "and",
+                                        "conditions":
+                                        [
+                                            {
+                                                "definition":
+                                                {
+                                                    "matcher": "eq",
+                                                    "value": 0,
+                                                    "events":
+                                                    [
+                                                        {
+                                                            "iam.id": "cbf877f3-3436-40a3-a20c-0c8fcd84f33b#20226428-13b0-4e98-a8f7-09106ab7ppc1",
+                                                            "iam.eventType": "disqualify"
+                                                        }
+                                                    ]
+                                                },
+                                                "type": "historical"
+                                            },
+                                            {
+                                                "definition":
+                                                {
+                                                    "logic": "and",
+                                                    "conditions":
+                                                    [
+                                                        {
+                                                            "definition":
+                                                            {
+                                                                "matcher": "lt",
+                                                                "values":
+                                                                [
+                                                                    2019715200
+                                                                ],
+                                                                "key": "~timestampu"
+                                                            },
+                                                            "type": "matcher"
+                                                        }
+                                                    ]
+                                                },
+                                                "type": "group"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "id": "be8dcdcb-af80-49c4-9e31-3a065dbbppc1"
+                }
+            ]
+        },
+        {
+            "scope": "mobileapp://com.adobe.MessagingDemoAppSwiftUI/cardstab",
+            "scopeDetails":
+            {
+                "correlationID": "86bf137f-6887-4c7d-9c35-e27dfafe3f41-0",
+                "characteristics":
+                {
+                    "eventToken": "eyJtZXNzYWdlRXhlY3V0aW9uIjp7Im1lc3NhZ2VFeGVjdXRpb25JRCI6IlVFOkluYm91bmQiLCJtZXNzYWdlSUQiOiI0MmQwMzVjMi01NWZiLTQ2MDgtOTFmZi0yYzFmYzZmYTAxMzAiLCJtZXNzYWdlUHVibGljYXRpb25JRCI6Ijg2YmYxMzdmLTY4ODctNGM3ZC05YzM1LWUyN2RmYWZlM2Y0MSIsIm1lc3NhZ2VUeXBlIjoibWFya2V0aW5nIiwiY2FtcGFpZ25JRCI6ImNiZjg3N2YzLTM0MzYtNDBhMy1hMjBjLTBjOGZjZDg0ZjMzYiIsImNhbXBhaWduVmVyc2lvbklEIjoiMGQwOTlmOGItZGM3Ni00NzlhLWI3MjgtNzZkY2I2OGZiOTNiIiwiY2FtcGFpZ25BY3Rpb25JRCI6IjIwMjI2NDI4LTEzYjAtNGU5OC1hOGY3LTA5MTA2YWI3NmM4YSJ9LCJtZXNzYWdlUHJvZmlsZSI6eyJtZXNzYWdlUHJvZmlsZUlEIjoiOWIzNDRkOWQtN2U2Mi00MDkwLWEwZTgtOTM1NDU2OWJmNzA0IiwiY2hhbm5lbCI6eyJfaWQiOiJodHRwczovL25zLmFkb2JlLmNvbS94ZG0vY2hhbm5lbHMvbWVzc2FnZUZlZWQiLCJfdHlwZSI6Imh0dHBzOi8vbnMuYWRvYmUuY29tL3hkbS9jaGFubmVsLXR5cGVzL21lc3NhZ2VGZWVkIn19fQ=="
+                },
+                "decisionProvider": "AJO",
+                "activity":
+                {
+                    "id": "cbf877f3-3436-40a3-a20c-0c8fcd84f33b#20226428-13b0-4e98-a8f7-09106ab7ppc2",
+                    "matchedSurfaces":
+                    [
+                        "mobileapp://com.adobe.MessagingDemoAppSwiftUI/cardstab"
+                    ],
+                    "priority": 0
+                },
+                "rank": 4
+            },
+            "id": "67970ced-801e-402e-83ab-8e15e5edppc2",
+            "items":
+            [
+                {
+                    "schema": "https://ns.adobe.com/personalization/ruleset-item",
+                    "data":
+                    {
+                        "version": 1,
+                        "rules":
+                        [
+                            {
+                                "consequences":
+                                [
+                                    {
+                                        "id": "327f3067-51a6-4700-a875-aafcc910ppc2",
+                                        "detail":
+                                        {
+                                            "id": "327f3067-51a6-4700-a875-aafcc910ppc2",
+                                            "data":
+                                            {
+                                                "content":
+                                                {
+                                                    "buttons":
+                                                    [
+                                                        {
+                                                            "text":
+                                                            {
+                                                                "content": "Check it out"
+                                                            },
+                                                            "id": "5b4d53f5-45bd-4e5c-a5cb-6e650b19ppc2",
+                                                            "interactId": "downloadClicked",
+                                                            "actionUrl": "https://www.nike.com/"
+                                                        }
+                                                    ],
+                                                    "title":
+                                                    {
+                                                        "content": "Just in: Luka 4"
+                                                    },
+                                                    "body":
+                                                    {
+                                                        "content": "Event the baddest on the court needs a fun hobby."
+                                                    },
+                                                    "actionUrl": "",
+                                                    "image":
+                                                    {
+                                                        "url": "https://static.nike.com/a/images/t_default/u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/4e37deec-76ce-4140-8ac0-834180c9b818/JORDAN+LUKA+4+GONE.png",
+                                                        "darkUrl": "https://static.nike.com/a/images/t_default/u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/4e37deec-76ce-4140-8ac0-834180c9b818/JORDAN+LUKA+4+GONE.png",
+                                                        "alt": ""
+                                                    },
+                                                    "dismissBtn":
+                                                    {
+                                                        "style": "simple"
+                                                    }
+                                                },
+                                                "publishedDate": 1744056934,
+                                                "meta":
+                                                {
+                                                    "surface": "mobileapp://com.adobe.MessagingDemoAppSwiftUI/cardstab",
+                                                    "unread": false,
+                                                    "adobe":
+                                                    {
+                                                        "template": "SmallImage"
+                                                    },
+                                                    "sentDate": "1 day ago"
+                                                },
+                                                "expiryDate": 2019715200,
+                                                "contentType": "application/json"
+                                            },
+                                            "schema": "https://ns.adobe.com/personalization/message/content-card"
+                                        },
+                                        "type": "schema"
+                                    }
+                                ],
+                                "condition":
+                                {
+                                    "type": "group",
+                                    "definition":
+                                    {
+                                        "logic": "and",
+                                        "conditions":
+                                        [
+                                            {
+                                                "definition":
+                                                {
+                                                    "matcher": "eq",
+                                                    "value": 0,
+                                                    "events":
+                                                    [
+                                                        {
+                                                            "iam.id": "cbf877f3-3436-40a3-a20c-0c8fcd84f33b#20226428-13b0-4e98-a8f7-09106ab7ppc2",
+                                                            "iam.eventType": "disqualify"
+                                                        }
+                                                    ]
+                                                },
+                                                "type": "historical"
+                                            },
+                                            {
+                                                "definition":
+                                                {
+                                                    "logic": "and",
+                                                    "conditions":
+                                                    [
+                                                        {
+                                                            "definition":
+                                                            {
+                                                                "matcher": "lt",
+                                                                "values":
+                                                                [
+                                                                    2019715200
+                                                                ],
+                                                                "key": "~timestampu"
+                                                            },
+                                                            "type": "matcher"
+                                                        }
+                                                    ]
+                                                },
+                                                "type": "group"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "id": "be8dcdcb-af80-49c4-9e31-3a065dbbppc2"
+                }
+            ]
+        },
+        {
+            "scope": "mobileapp://com.adobe.MessagingDemoAppSwiftUI/cardstab",
+            "scopeDetails":
+            {
+                "correlationID": "86bf137f-6887-4c7d-9c35-e27dfafe3f41-0",
+                "characteristics":
+                {
+                    "eventToken": "eyJtZXNzYWdlRXhlY3V0aW9uIjp7Im1lc3NhZ2VFeGVjdXRpb25JRCI6IlVFOkluYm91bmQiLCJtZXNzYWdlSUQiOiI0MmQwMzVjMi01NWZiLTQ2MDgtOTFmZi0yYzFmYzZmYTAxMzAiLCJtZXNzYWdlUHVibGljYXRpb25JRCI6Ijg2YmYxMzdmLTY4ODctNGM3ZC05YzM1LWUyN2RmYWZlM2Y0MSIsIm1lc3NhZ2VUeXBlIjoibWFya2V0aW5nIiwiY2FtcGFpZ25JRCI6ImNiZjg3N2YzLTM0MzYtNDBhMy1hMjBjLTBjOGZjZDg0ZjMzYiIsImNhbXBhaWduVmVyc2lvbklEIjoiMGQwOTlmOGItZGM3Ni00NzlhLWI3MjgtNzZkY2I2OGZiOTNiIiwiY2FtcGFpZ25BY3Rpb25JRCI6IjIwMjI2NDI4LTEzYjAtNGU5OC1hOGY3LTA5MTA2YWI3NmM4YSJ9LCJtZXNzYWdlUHJvZmlsZSI6eyJtZXNzYWdlUHJvZmlsZUlEIjoiOWIzNDRkOWQtN2U2Mi00MDkwLWEwZTgtOTM1NDU2OWJmNzA0IiwiY2hhbm5lbCI6eyJfaWQiOiJodHRwczovL25zLmFkb2JlLmNvbS94ZG0vY2hhbm5lbHMvbWVzc2FnZUZlZWQiLCJfdHlwZSI6Imh0dHBzOi8vbnMuYWRvYmUuY29tL3hkbS9jaGFubmVsLXR5cGVzL21lc3NhZ2VGZWVkIn19fQ=="
+                },
+                "decisionProvider": "AJO",
+                "activity":
+                {
+                    "id": "cbf877f3-3436-40a3-a20c-0c8fcd84f33b#20226428-13b0-4e98-a8f7-09106ab7ppc3",
+                    "matchedSurfaces":
+                    [
+                        "mobileapp://com.adobe.MessagingDemoAppSwiftUI/cardstab"
+                    ],
+                    "priority": 0
+                },
+                "rank": 4
+            },
+            "id": "67970ced-801e-402e-83ab-8e15e5edppc3",
+            "items":
+            [
+                {
+                    "schema": "https://ns.adobe.com/personalization/ruleset-item",
+                    "data":
+                    {
+                        "version": 1,
+                        "rules":
+                        [
+                            {
+                                "consequences":
+                                [
+                                    {
+                                        "id": "327f3067-51a6-4700-a875-aafcc910ppc3",
+                                        "detail":
+                                        {
+                                            "id": "327f3067-51a6-4700-a875-aafcc910ppc3",
+                                            "data":
+                                            {
+                                                "content":
+                                                {
+                                                    "buttons":
+                                                    [
+                                                        {
+                                                            "text":
+                                                            {
+                                                                "content": "Shop now"
+                                                            },
+                                                            "id": "5b4d53f5-45bd-4e5c-a5cb-6e650b19ppc3",
+                                                            "interactId": "downloadClicked",
+                                                            "actionUrl": "https://www.nike.com/"
+                                                        }
+                                                    ],
+                                                    "title":
+                                                    {
+                                                        "content": "Blaze New Trails"
+                                                    },
+                                                    "body":
+                                                    {
+                                                        "content": "Roam your world in the Nike WildHourse 10."
+                                                    },
+                                                    "actionUrl": "",
+                                                    "image":
+                                                    {
+                                                        "url": "https://believeintherun.com/wp-content/uploads/2023/08/Nike-Wildhorse-8-cover.jpg",
+                                                        "darkUrl": "https://believeintherun.com/wp-content/uploads/2023/08/Nike-Wildhorse-8-cover.jpg",
+                                                        "alt": ""
+                                                    },
+                                                    "dismissBtn":
+                                                    {
+                                                        "style": "simple"
+                                                    }
+                                                },
+                                                "publishedDate": 1744056934,
+                                                "meta":
+                                                {
+                                                    "surface": "mobileapp://com.adobe.MessagingDemoAppSwiftUI/cardstab",
+                                                    "unread": false,
+                                                    "adobe":
+                                                    {
+                                                        "template": "LargeImage"
+                                                    },
+                                                    "sentDate": "2 days ago"
+                                                },
+                                                "expiryDate": 2019715200,
+                                                "contentType": "application/json"
+                                            },
+                                            "schema": "https://ns.adobe.com/personalization/message/content-card"
+                                        },
+                                        "type": "schema"
+                                    }
+                                ],
+                                "condition":
+                                {
+                                    "type": "group",
+                                    "definition":
+                                    {
+                                        "logic": "and",
+                                        "conditions":
+                                        [
+                                            {
+                                                "definition":
+                                                {
+                                                    "matcher": "eq",
+                                                    "value": 0,
+                                                    "events":
+                                                    [
+                                                        {
+                                                            "iam.id": "cbf877f3-3436-40a3-a20c-0c8fcd84f33b#20226428-13b0-4e98-a8f7-09106ab7ppc3",
+                                                            "iam.eventType": "disqualify"
+                                                        }
+                                                    ]
+                                                },
+                                                "type": "historical"
+                                            },
+                                            {
+                                                "definition":
+                                                {
+                                                    "logic": "and",
+                                                    "conditions":
+                                                    [
+                                                        {
+                                                            "definition":
+                                                            {
+                                                                "matcher": "lt",
+                                                                "values":
+                                                                [
+                                                                    2019715200
+                                                                ],
+                                                                "key": "~timestampu"
+                                                            },
+                                                            "type": "matcher"
+                                                        }
+                                                    ]
+                                                },
+                                                "type": "group"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "id": "be8dcdcb-af80-49c4-9e31-3a065dbbppc3"
+                }
+            ]
+        }
+    ]
+}

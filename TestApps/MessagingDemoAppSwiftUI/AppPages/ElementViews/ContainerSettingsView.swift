@@ -148,12 +148,12 @@ struct ContainerSettingsView: View {
                                 get: { settings.header?.isVisible ?? false },
                                 set: { showHeader in
                                     if showHeader {
-                                        let headerTitle = AEPText(content: settings.header?.title.content ?? "Inbox Header")
+                                        let headerTitle = AEPText(content: settings.header?.title.content ?? "Inbox")
                                         headerTitle.font = settings.header?.title.font ?? .system(size: 18, weight: .medium)
-                                        headerTitle.textColor = settings.header?.title.textColor ?? Color(.white)
+                                        headerTitle.textColor = settings.header?.title.textColor ?? Color(.black)
                                         var headerSettings = ContainerHeader(title: headerTitle)
                                         headerSettings.isVisible = true
-                                        headerSettings.backgroundColor = settings.header?.backgroundColor ?? Color(.systemBlue)
+                                        headerSettings.backgroundColor = settings.header?.backgroundColor ?? Color(.white)
                                         headerSettings.height = settings.header?.height ?? 50
                                         headerSettings.padding = settings.header?.padding ?? EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
                                         settings.header = headerSettings
@@ -350,7 +350,7 @@ struct ContainerSettingsView: View {
                                     )
                                 ) {
                                     TextField("Icon Name (SF Symbol)", text: Binding(
-                                        get: { settings.unreadState.icon?.icon ?? "circle.fill" },
+                                        get: { settings.unreadState.icon?.icon ?? "eye" },
                                         set: { iconName in
                                             if settings.unreadState.icon == nil {
                                                 settings.unreadState.icon = AEPImage(icon: iconName, color: .red)

@@ -91,7 +91,7 @@ class CardCustomizer : ContentCardCustomizing {
         
         template.image?.modifier = AEPViewModifier(ImageModifier())
         
-        template.buttons?.first?.text.font = .system(size: 13)
+        template.buttons?.first?.text.font = .system(size: 10)
         template.buttons?.first?.text.textColor = .primary
         template.buttons?.first?.modifier = AEPViewModifier(ButtonModifier())
         
@@ -111,7 +111,29 @@ class CardCustomizer : ContentCardCustomizing {
     }
     
     func customize(template: LargeImageTemplate) {
+        // customize UI elements
+        template.title.textColor = .primary
+        template.title.font = .subheadline
+        template.body?.textColor = .secondary
+        template.body?.font = .caption
+                
+        template.buttons?.first?.text.font = .system(size: 10)
+        template.buttons?.first?.text.textColor = .primary
+        template.buttons?.first?.modifier = AEPViewModifier(ButtonModifier())
         
+        
+        // customize stack structure
+        template.rootHStack.spacing = 10
+        template.textVStack.alignment = .leading
+        template.textVStack.spacing = 10
+        
+        // add custom modifiers
+        template.buttonHStack.modifier = AEPViewModifier(ButtonHStackModifier())
+        template.rootHStack.modifier = AEPViewModifier(RootHStackModifier())
+        
+        // customize the dismiss buttons
+        template.dismissButton?.image.iconColor = .primary
+        template.dismissButton?.image.iconFont = .system(size: 10)
     }
     
     struct RootHStackModifier : ViewModifier {

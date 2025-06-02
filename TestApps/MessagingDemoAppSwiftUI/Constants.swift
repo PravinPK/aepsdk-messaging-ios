@@ -21,7 +21,7 @@ enum Constants {
     // "staging/1b50a869c4a2/bcd1a623883f/launch-e44d085fc760-development"
     
     static let isStage = false
-    static let assuranceURL = ""
+    static let assuranceURL = "demoapp://?adb_validation_sessionid=570f0dfe-8c90-478c-9924-4ca895c2bc6a"
     
     // Surface Names
     enum SurfaceName {
