@@ -70,6 +70,7 @@ public class ContentCardUI: Identifiable {
 
         // Initialize the ContentCardUI with the proposition and template
         let contentCardUI = ContentCardUI(proposition, schemaData, template, listener)
+        contentCardUI.listener?.onCreate(contentCardUI)
 
         // set the listener for the template
         template.eventHandler = contentCardUI

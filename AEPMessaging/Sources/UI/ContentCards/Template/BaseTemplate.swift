@@ -61,27 +61,29 @@ public class BaseTemplate: ObservableObject {
     /// - Returns: A SwiftUI view of the templated Content Card
     func buildCardView<Content: View>(@ViewBuilder content: () -> Content) -> some View {
         content()
-            .background(backgroundColor)
             .onTapGesture {
                 self.eventHandler?.onInteract(interactionId: UIConstants.CardTemplate.InteractionID.cardTapped, actionURL: self.actionURL)
-            }.onAppear(perform: {
+            }
+            .onAppear(perform: {
                 if !self.isDisplayed {
                     self.isDisplayed = true
                     self.eventHandler?.onDisplay()
                 }
-            }).overlay(alignment: dismissButton?.alignment ??
-                UIConstants.CardTemplate.DefaultStyle.DismissButton.ALIGNMENT, content: {
-                    if dismissButton != nil {
-                        dismissButton?.view
-                            .padding(UIConstants.CardTemplate.DefaultStyle.PADDING)
-                    }
-                })
+            })
             .overlay(content: {
                 ForEach(0..<overlays.count, id: \.self) { [self] index in
                     overlays[index].view
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: overlays[index].alignment)
                 }
             })
+            .overlay(alignment: dismissButton?.alignment ??
+                UIConstants.CardTemplate.DefaultStyle.DismissButton.ALIGNMENT, content: {
+                    if dismissButton != nil {
+                        dismissButton?.view
+                            .padding(UIConstants.CardTemplate.DefaultStyle.PADDING)
+                    }
+                })
+            .background(backgroundColor)
     }
     
     /// Adds an overlay to the content card

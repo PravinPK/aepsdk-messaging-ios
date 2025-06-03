@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 import AEPMessaging
 import SwiftUI
 
-struct CardsView: View, ContentCardUIEventListening {
+struct CardsView: View, ContainerEventListening {
     
     let cardsSurface = Surface(path: Constants.SurfaceName.CONTENT_CARD)
     @State var container: ContainerUI?
@@ -66,17 +66,47 @@ struct CardsView: View, ContentCardUIEventListening {
         }
     }
     
-    func onDisplay(_ card: ContentCardUI) {
-        print("TestAppLog : ContentCard Displayed")
+    func onDownloading(_ container: AEPMessaging.ContainerUI) {
+        print("Peaks: Content cards are downloading")
     }
     
-    func onDismiss(_ card: ContentCardUI) {
-        print("TestAppLog : ContentCard Dismissed")
+    func onLoaded(_ container: AEPMessaging.ContainerUI) {
+        print("Peaks: Content cards have loaded")
     }
     
-    func onInteract(_ card: ContentCardUI, _ interactionId: String, actionURL: URL?) -> Bool {
-        print("TestAppLog : ContentCard Interacted : Interaction - \(interactionId)")
+    func onError(_ container: AEPMessaging.ContainerUI, _ error: any Error) {
+        print("Peaks: Error loading content cards: \(error)")
+    }
+    
+    func onEmpty(_ container: AEPMessaging.ContainerUI) {
+        print("Peaks: No content cards available")
+    }
+    
+    func onCardDismissed(_ card: AEPMessaging.ContentCardUI) {
+        print("Peaks: Card was dismissed")
+    }
+    
+    func onCardDisplayed(_ card: AEPMessaging.ContentCardUI) {
+        print("Peaks: Card was displayed")
+    }
+    
+    func onCardInteracted(_ card: AEPMessaging.ContentCardUI, _ interactionId: String, actionURL: URL?) -> Bool {
+        print("Peaks: Card was interacted with - Interaction ID: \(interactionId), Action URL: \(actionURL?.absoluteString ?? "none")")
         return false
+    }
+    
+    func onCardCreated(_ card: AEPMessaging.ContentCardUI) {
+        if let smallImageCard = card.template as? SmallImageTemplate {
+            if let sentDate = card.meta?["sentDate"] as? String {
+                smallImageCard.textVStack.addView(Text(sentDate).foregroundColor(.secondary).font(.system(size: 11, weight: .light)))
+            }
+        }
+        
+        if let largeImageCard = card.template as? LargeImageTemplate {
+            if let sentDate = card.meta?["sentDate"] as? String {
+                largeImageCard.textVStack.addView(Text(sentDate).foregroundColor(.secondary).font(.system(size: 11, weight: .light)))
+            }
+        }
     }
 }
 
@@ -94,7 +124,6 @@ class CardCustomizer : ContentCardCustomizing {
         template.buttons?.first?.text.font = .system(size: 10)
         template.buttons?.first?.text.textColor = .primary
         template.buttons?.first?.modifier = AEPViewModifier(ButtonModifier())
-        
         
         // customize stack structure
         template.rootHStack.spacing = 10

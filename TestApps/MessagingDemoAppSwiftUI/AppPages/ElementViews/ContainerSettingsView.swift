@@ -233,13 +233,7 @@ struct ContainerSettingsView: View {
                             )
                         ) {
                             if settings.pullToRefresh.isEnabled {
-                                ColorPicker("Refresh Indicator Color", selection: Binding(
-                                    get: { settings.pullToRefresh.tintColor },
-                                    set: { color in
-                                        settings.pullToRefresh.tintColor = color
-                                        onSettingsChanged(settings)
-                                    }
-                                ))
+                                // Empty section since we removed the color picker
                             }
                         }
                         
@@ -341,7 +335,7 @@ struct ContainerSettingsView: View {
                                         get: { settings.unreadState.icon != nil },
                                         set: { isEnabled in
                                             if isEnabled {
-                                                settings.unreadState.icon = AEPImage(icon: "circle.fill", color: .red)
+                                                settings.unreadState.icon = AEPImage(icon: "eye", color: .blue)
                                             } else {
                                                 settings.unreadState.icon = nil
                                             }

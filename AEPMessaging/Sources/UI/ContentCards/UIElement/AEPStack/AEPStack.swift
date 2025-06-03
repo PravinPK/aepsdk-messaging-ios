@@ -38,7 +38,7 @@ public class AEPStack: ObservableObject {
 
     /// Adds a view as the last child of the stack.
     /// - Parameter view: The SwiftUI view to be added.
-    func addView<V: View>(_ view: V) {
+    public func addView<V: View>(_ view: V) {
         let model = AnyViewModel(wrappedView: view)
         childModels.append(model)
     }

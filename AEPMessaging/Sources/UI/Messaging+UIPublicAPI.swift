@@ -76,7 +76,7 @@ public extension Messaging {
     /// - Returns: A new ContainerUI instance that can be used to display and manage content cards.
     static func getContentCardsContainerUI(for surface: Surface,
                                           customizer: ContentCardCustomizing? = nil,
-                                          listener: ContentCardUIEventListening? = nil,
+                                          listener: ContainerEventListening? = nil,
                                           settings: ContainerSetting = ContainerSetting()) -> ContainerUI {
         return ContainerUI(surface: surface,
                          customizer: customizer,

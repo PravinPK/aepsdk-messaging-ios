@@ -63,7 +63,7 @@ public struct ContainerHeader {
     
     public var backgroundColor: Color = Color(.systemBackground)
     
-    public var height: CGFloat = 60
+    public var height: CGFloat = 30
     
     public var padding: EdgeInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
     

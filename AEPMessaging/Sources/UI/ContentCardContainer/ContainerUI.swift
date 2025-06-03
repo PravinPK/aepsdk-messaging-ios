@@ -20,7 +20,8 @@ import Foundation
 
 /// ContentCardUI is a class that holds data for a content card and provides a SwiftUI view representation of that content.
 @available(iOS 15.0, *)
-public class ContainerUI: Identifiable, ObservableObject {
+public class ContainerUI: Identifiable, ObservableObject, ContentCardUIEventListening {
+    
     /// The underlying data model for the content card.
     @Published private(set) var contentCards: [ContentCardUI] = []
     
@@ -36,8 +37,11 @@ public class ContainerUI: Identifiable, ObservableObject {
     /// Customizer for content cards
     private let customizer: ContentCardCustomizing?
     
+    /// Listener for container events
+    private var listener: ContainerEventListening?
+    
     /// Listener for content card events
-    private let listener: ContentCardUIEventListening?
+    private var cardEventListener: ContentCardUIEventListening?
     
     /// SwiftUI view that represents the content card
     public var view: some View {
@@ -48,11 +52,11 @@ public class ContainerUI: Identifiable, ObservableObject {
     /// - Parameters:
     ///   - surface: The surface for which to retrieve the content cards
     ///   - customizer: Optional customizer for content cards
-    ///   - listener: Optional listener for content card events
+    ///   - listener: Optional listener for container events
     ///   - settings: Optional settings to customize the container appearance
     init(surface: Surface,
          customizer: ContentCardCustomizing? = nil,
-         listener: ContentCardUIEventListening? = nil,
+         listener: ContainerEventListening? = nil,
          settings: ContainerSetting = ContainerSetting()) {
         self.surface = surface
         self.customizer = customizer
@@ -61,6 +65,7 @@ public class ContainerUI: Identifiable, ObservableObject {
         
         // Start downloading immediately
         downloadCards()
+        cardEventListener = self
     }
     
     /// Refreshes the settings and redraws the view
@@ -73,6 +78,8 @@ public class ContainerUI: Identifiable, ObservableObject {
     /// Downloads the content cards for the surface
     public func downloadCards() {
         state = .downloading
+        listener?.onDownloading(self)
+        
         Messaging.getPropositionsForSurfaces([surface]) { [weak self] propositionDict, error in
             guard let self = self else { return }
             
@@ -82,6 +89,7 @@ public class ContainerUI: Identifiable, ObservableObject {
                     Log.error(label: UIConstants.LOG_TAG,
                              "Error retrieving content cards UI for surface, \(self.surface.uri). Error \(error)")
                     self.state = .error(error)
+                    self.listener?.onError(self, error)
                     return
                 }
 
@@ -90,13 +98,14 @@ public class ContainerUI: Identifiable, ObservableObject {
                 guard let propositions = propositionDict?[self.surface] else {
                     self.state = .empty
                     self.contentCards = []
+                    self.listener?.onEmpty(self)
                     return
                 }
 
                 for proposition in propositions {
                     guard let contentCard = ContentCardUI.createInstance(with: proposition,
                                                                       customizer: self.customizer,
-                                                                      listener: self.listener) else {
+                                                                      listener: self) else {
                         Log.warning(label: UIConstants.LOG_TAG,
                                  "Failed to create ContentCardUI for proposition with ID: \(proposition.uniqueId)")
                         continue
@@ -107,6 +116,7 @@ public class ContainerUI: Identifiable, ObservableObject {
                 self.contentCards = cards
                 self.applyUnreadSettings()
                 self.state = .loaded
+                self.listener?.onLoaded(self)
             }
         }
     }
@@ -218,6 +228,27 @@ public class ContainerUI: Identifiable, ObservableObject {
         .frame(height: header.height)
         .padding(header.padding)
         .background(header.backgroundColor)
+    }
+    
+    public func onCreate(_ card: ContentCardUI) {
+        listener?.onCardCreated(card)
+    }
+    
+    public func onDisplay(_ card: ContentCardUI) {
+        listener?.onCardDisplayed(card)
+    }
+
+    public func onDismiss(_ card: ContentCardUI) {
+        contentCards.removeAll { $0.id == card.id }
+        if contentCards.isEmpty {
+            state = .empty
+            listener?.onEmpty(self)
+        }
+        listener?.onCardDismissed(card)
+    }
+
+    public func onInteract(_ card: ContentCardUI, _ interactionId: String, actionURL: URL?) -> Bool {
+        listener?.onCardInteracted(card, interactionId, actionURL: actionURL) ?? false
     }
 }
 
