@@ -45,10 +45,16 @@ public class BaseTemplate: ObservableObject {
     /// Use this boolean to avoid sending multiple display events on a template
     var isDisplayed: Bool = false
 
+    /// The schema data containing all content card information including metadata.
+    /// This property provides access to the underlying content card data, including the `meta` dictionary
+    /// which can be used for custom template styling and behavior in the `ContentCardCustomizing` protocol.
+    public let schemaData: ContentCardSchemaData
+
     /// Initializes a `BaseTemplate` with the given schema data.
     /// This initializer is designed to be called by subclasses to perform common initialization tasks.
     /// - Parameter schemaData: The schema data used for initialization.
     init?(_ schemaData: ContentCardSchemaData) {
+        self.schemaData = schemaData
         actionURL = schemaData.actionUrl
     }
 
