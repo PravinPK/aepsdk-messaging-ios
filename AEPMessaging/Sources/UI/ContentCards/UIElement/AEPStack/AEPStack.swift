@@ -50,7 +50,7 @@ public class AEPStack: ObservableObject {
     ///   - index: The index at which to insert the view model.
     /// - Throws:
     ///   - `AEPStackError.indexOutOfBounds` if the specified index is out of the valid range.
-    func insertView<V: View>(_ view: V, at index: Int) throws {
+    public func insertView<V: View>(_ view: V, at index: Int) throws {
         guard index >= 0 && index <= childModels.count else {
             Log.warning(label: UIConstants.LOG_TAG, "AEPStack: Cannot insert view at index \(index). Index out of bounds.")
             throw AEPStackError.indexOutOfBounds
@@ -63,7 +63,7 @@ public class AEPStack: ObservableObject {
     /// - Parameter index: The index of the view model to be removed.
     /// - Throws:
     ///   - `AEPStackError.indexOutOfBounds` if the specified index is out of the valid range.
-    func removeView(at index: Int) throws {
+    public func removeView(at index: Int) throws {
         guard childModels.indices.contains(index) else {
             Log.warning(label: UIConstants.LOG_TAG, "AEPStack: Cannot remove view at index \(index). Index out of bounds.")
             throw AEPStackError.indexOutOfBounds
